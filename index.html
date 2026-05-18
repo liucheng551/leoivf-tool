@@ -11,8 +11,8 @@
     body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f3f6f8; color: #1f2937; }
     .page { max-width: 1320px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 430px 1fr; gap: 20px; }
     .panel, .preview { background: #fff; border-radius: 16px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); padding: 18px; }
-    h1 { font-size: 26px; margin: 0 0 8px; }
-    h2 { font-size: 18px; margin: 26px 0 12px; }
+    h1 { font-size: 24px; margin: 0 0 6px; }
+    h2 { font-size: 17px; margin: 20px 0 10px; }
     h3 { font-size: 16px; margin: 0 0 12px; }
     p { line-height: 1.7; }
     .muted { color: #6b7280; font-size: 13px; line-height: 1.7; }
@@ -24,9 +24,9 @@
     .primary { background: #0f766e; color: #fff; }
     .secondary { background: #e5e7eb; color: #111827; }
     .danger { background: #b91c1c; color: #fff; }
-    .report { background: #fff; border: 1px solid #d9f0ec; border-radius: 16px; padding: 22px 24px 28px; min-height: 760px; }
-    .meta-line { color: #6b7280; font-size: 13px; margin-bottom: 18px; }
-    .success-box { background: #eaf7f7; border: 1px solid #b9dddd; border-radius: 14px; padding: 14px 16px; }
+    .report { background: #fff; border: 1px solid #d9f0ec; border-radius: 16px; padding: 18px 20px 20px; min-height: 760px; }
+    .meta-line { color: #6b7280; font-size: 12px; margin-bottom: 12px; }
+    .success-box { background: #eaf7f7; border: 1px solid #b9dddd; border-radius: 14px; padding: 12px 14px; }
     .pill { display: inline-block; background: #0f766e; color: #fff; padding: 5px 10px; border-radius: 999px; font-size: 12px; margin-bottom: 10px; }
     .success-layout { display: grid; grid-template-columns: 1fr 380px; gap: 18px; align-items: center; }
     .progress-box { padding: 8px 0; }
@@ -39,12 +39,12 @@
     .marker-track { position: relative; height: 12px; margin-top: 8px; }
     .marker { position: absolute; top: -2px; width: 12px; height: 12px; border-radius: 50%; background: #111827; transform: translateX(-50%); }
     .progress-labels { display: flex; justify-content: space-between; font-size: 12px; color: #6b7280; margin-top: 6px; }
-    .radar-section { display: grid; grid-template-columns: 300px 1fr; gap: 20px; align-items: center; }
-    .radar-wrap { max-width: 280px; margin: 0 auto; }
-    .dim-list { padding-left: 18px; line-height: 1.9; }
-    .advice-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+    .radar-section { display: grid; grid-template-columns: 270px 1fr; gap: 14px; align-items: center; }
+    .radar-wrap { max-width: 240px; margin: 0 auto; }
+    .dim-list { padding-left: 18px; line-height: 1.65; margin: 0; }
+    .advice-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
     .tag { float: right; background: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 999px; font-size: 12px; }
-    .footer-note { margin-top: 20px; padding-top: 12px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 12px; line-height: 1.7; }
+    .footer-note { margin-top: 14px; padding-top: 10px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 11px; line-height: 1.5; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
     @media (max-width: 980px) {
       .page { grid-template-columns: 1fr; }
       .success-layout, .radar-section { grid-template-columns: 1fr; }
@@ -435,7 +435,7 @@ check_box无相关病史`;
       for (const s of suggestions) {
         
       }
-      return Array.from(new Set(suggestions)).slice(0, 3);
+      return Array.from(new Set(suggestions)).slice(0, 2);
     }
 
     function overallImageComment(scores) {
@@ -462,15 +462,15 @@ check_box无相关病史`;
       return `
         <h1>试管综合评估报告</h1>
         <div class="meta-line">姓名：${data.name}　｜　年龄：${data.ageLabel}　｜　评估日期：${getToday()}${sourceUrl ? `　｜　结果链接：${sourceUrl}` : ''}</div>
-        <p class="muted">本报告基于你在 LEOIVF 完成的问卷结果，用于帮助你看清当前生育力画像与下一步可优化方向。</p>
+        <p class="muted">本报告基于你在 LEOIVF 完成的问卷结果生成。</p>
 
         <h2>一、整体成功率预测</h2>
         <div class="success-box">
           <div class="pill">综合档位：${levelLabel(success.successRate)} ｜ 预测成功率：${success.successRate}%</div>
           <div class="success-layout">
             <div>
-              <p><strong>综合年龄、卵巢储备、既往胚胎表现、子宫环境及生活方式等因素，当前下一次 IVF 的整体成功率预测约为 ${success.successRate}%，目前处于“${levelText(success.successRate)}”等级。</strong></p>
-              <p>通过针对性指导、改善和调理后，成功率仍有较大上升空间。</p>
+              <p><strong>当前下一次 IVF 整体成功率预测约为 ${success.successRate}%，目前处于“${levelText(success.successRate)}”等级。</strong></p>
+              <p>通过针对性指导、改善和调理后，成功率仍有上升空间。</p>
             </div>
             <div class="progress-box">
               <div class="progress">
@@ -484,25 +484,24 @@ check_box无相关病史`;
         <p class="muted">说明：此区间用于辅助决策，不是对个人精确妊娠率的预测。</p>
 
         <h2>二、当前生育力画像</h2>
-        <p class="muted">该画像用于帮助你快速看清当前影响试管成功率的关键环节，便于识别目前最值得优先优化的方向。</p>
+        <p class="muted">以下画像用于识别当前最值得优先优化的关键环节。</p>
         <div class="radar-section">
           <div class="radar-wrap"><canvas id="radarCanvas"></canvas></div>
           <div>
             <ul class="dim-list">
               ${labels.map((label, i) => `<li><strong>${label}</strong>：${score5(vals[i])} 分。</li>`).join('')}
             </ul>
-            <p><strong>${overallImageComment(scores)}</strong></p>
+
           </div>
         </div>
 
         <h2>三、个性化改善建议</h2>
         <div class="advice-card">
-          <h3>总评</h3>
           <p><strong>${overallAdviceSummary(scores)}</strong></p>
           <ul>${buildTopAdvice(scores, data).map(x => `<li>${x}</li>`).join('')}</ul>
         </div>
 
-        <div class="footer-note">说明：本工具为辅助评估模板，基于问卷文本中的已识别字段自动生成。报告可人工继续润色，用于咨询前准备或医生沟通提纲，不替代正式医疗诊断。</div>
+        <div class="footer-note"><span>说明：本报告旨在帮你定位问题，不代表任何诊疗意见。</span><span>© 2026 LEOIVF. All rights reserved.</span></div>
       `;
     }
 
