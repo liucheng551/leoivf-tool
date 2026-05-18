@@ -11,8 +11,8 @@
     body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f3f6f8; color: #1f2937; }
     .page { max-width: 1320px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 430px 1fr; gap: 20px; }
     .panel, .preview { background: #fff; border-radius: 16px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); padding: 18px; }
-    h1 { font-size: 24px; margin: 0 0 6px; }
-    h2 { font-size: 17px; margin: 20px 0 10px; }
+    h1 { font-size: 28px; margin: 0 0 8px; text-align:center; }
+    h2 { font-size: 17px; margin: 18px 0 10px; display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; }
     h3 { font-size: 16px; margin: 0 0 12px; }
     p { line-height: 1.7; }
     .muted { color: #6b7280; font-size: 13px; line-height: 1.7; }
@@ -25,7 +25,7 @@
     .secondary { background: #e5e7eb; color: #111827; }
     .danger { background: #b91c1c; color: #fff; }
     .report { background: #fff; border: 1px solid #d9f0ec; border-radius: 16px; padding: 18px 20px 20px; min-height: 760px; }
-    .meta-line { color: #6b7280; font-size: 12px; margin-bottom: 12px; }
+    .meta-line { color: #6b7280; font-size: 14px; margin-bottom: 8px; text-align:center; }
     .success-box { background: #eaf7f7; border: 1px solid #b9dddd; border-radius: 14px; padding: 12px 14px; }
     .pill { display: inline-block; background: #0f766e; color: #fff; padding: 5px 10px; border-radius: 999px; font-size: 12px; margin-bottom: 10px; }
     .success-layout { display: grid; grid-template-columns: 1fr 380px; gap: 18px; align-items: center; }
@@ -40,7 +40,7 @@
     .marker { position: absolute; top: -2px; width: 12px; height: 12px; border-radius: 50%; background: #111827; transform: translateX(-50%); }
     .progress-labels { display: flex; justify-content: space-between; font-size: 12px; color: #6b7280; margin-top: 6px; }
     .radar-section { display: grid; grid-template-columns: 270px 1fr; gap: 14px; align-items: center; }
-    .radar-wrap { max-width: 240px; margin: 0 auto; }
+    .radar-wrap { max-width: 250px; margin: 0 auto; }
     .dim-list { padding-left: 18px; line-height: 1.65; margin: 0; }
     .advice-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
     .tag { float: right; background: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 999px; font-size: 12px; }
@@ -406,9 +406,9 @@ check_box无相关病史`;
         ['激素代谢', score5(scores.hormone)]
       ].sort((a,b) => a[1]-b[1]);
       const weakest = items.filter(x => x[1] <= 2).map(x => x[0]);
-      if (weakest.length >= 2) return `你当前最需要优先加强的是${weakest[0]}和${weakest[1]}，建议先补齐这两个更可能影响整体成功率的关键短板。`;
-      if (weakest.length === 1) return `你当前最需要优先加强的是${weakest[0]}，建议先把这一环节稳定下来，再同步优化其他方面。`;
-      return `你当前的整体准备度处于可继续优化的状态，建议优先提升得分最低的 1–2 个维度，以带动整体成功率进一步上升。`;
+      if (weakest.length >= 2) return `当前优先改善${weakest[0]}和${weakest[1]}。`;
+      if (weakest.length === 1) return `当前优先改善${weakest[0]}。`;
+      return `当前整体准备度仍有优化空间。`;
     }
 
     function buildTopAdvice(scores, data) {
@@ -464,7 +464,7 @@ check_box无相关病史`;
         <div class="meta-line">姓名：${data.name}　｜　年龄：${data.ageLabel}　｜　评估日期：${getToday()}${sourceUrl ? `　｜　结果链接：${sourceUrl}` : ''}</div>
         <p class="muted">本报告基于你在 LEOIVF 完成的问卷结果生成。</p>
 
-        <h2>一、整体成功率预测</h2>
+        <h2>一、整体成功率预测 <span class="inline-note">说明：此区间用于辅助决策，不是对个人精确妊娠率的预测。</span></h2>
         <div class="success-box">
           <div class="pill">综合档位：${levelLabel(success.successRate)} ｜ 预测成功率：${success.successRate}%</div>
           <div class="success-layout">
