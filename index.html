@@ -395,6 +395,49 @@ check_box无相关病史`;
     }
 
 
+
+    function overallAdviceSummary(scores) {
+      const items = [
+        ['卵巢储备', score5(scores.reserve)],
+        ['卵子/胚胎', score5(scores.eggEmbryo)],
+        ['精子因素', score5(scores.sperm)],
+        ['子宫环境', score5(scores.uterus)],
+        ['生活/情绪', score5(scores.lifestyle)],
+        ['激素代谢', score5(scores.hormone)]
+      ].sort((a,b) => a[1]-b[1]);
+      const weakest = items.filter(x => x[1] <= 2).map(x => x[0]);
+      if (weakest.length >= 2) return `你当前最需要优先加强的是${weakest[0]}和${weakest[1]}，建议先补齐这两个更可能影响整体成功率的关键短板。`;
+      if (weakest.length === 1) return `你当前最需要优先加强的是${weakest[0]}，建议先把这一环节稳定下来，再同步优化其他方面。`;
+      return `你当前的整体准备度处于可继续优化的状态，建议优先提升得分最低的 1–2 个维度，以带动整体成功率进一步上升。`;
+    }
+
+    function buildTopAdvice(scores, data) {
+      const suggestions = [];
+      if (score5(scores.uterus) <= 2 || data.uterusIssue.includes('息肉') || data.uterusIssue.includes('肌瘤') || data.endometrium.includes('<6mm')) {
+        suggestions.push('优先处理子宫环境问题：如内膜偏薄、息肉、肌瘤或其他宫腔异常，建议先完成相关评估与处理，再进入下一步移植或促排准备。');
+      }
+      if (score5(scores.lifestyle) <= 2 || data.exercise.includes('几乎不运动') || data.diet.includes('不规律') || data.mood.includes('经常焦虑')) {
+        suggestions.push('同步优化生活与情绪状态：先把睡眠、运动、饮食和压力管理稳定下来，为后续治疗提供更好的基础条件。');
+      }
+      if (score5(scores.eggEmbryo) <= 3 || score5(scores.sperm) <= 3 || data.semen.includes('偏低') || data.morphology) {
+        suggestions.push('重点复盘既往胚胎表现和男方因素：下次复诊时建议围绕受精率、囊胚率、优质胚胎率及精子质量做针对性沟通。');
+      }
+      if (score5(scores.hormone) <= 3 || data.glucose.includes('偏高') || data.lipid.includes('偏高') || !data.tsh.includes('正常')) {
+        suggestions.push('把激素与代谢状态调到更稳定：进入下一周期前，尽量把甲状腺、血糖、胰岛素及血脂控制在更合适的范围。');
+      }
+      if (score5(scores.reserve) <= 2 || data.age >= 38) {
+        suggestions.push('对卵巢储备和年龄因素要更讲求效率：建议和医生重点讨论下一周期的策略安排，而不是在低效尝试中反复消耗时间。');
+      }
+      if (suggestions.length < 3) {
+        suggestions.push('带着这份报告和医生沟通时，优先确认“目前最限制成功率的是哪一环”，再制定下一步计划。');
+      }
+      const uniq = [];
+      for (const s of suggestions) {
+        
+      }
+      return Array.from(new Set(suggestions)).slice(0, 3);
+    }
+
     function overallImageComment(scores) {
       const items = [
         ['卵巢储备', score5(scores.reserve)],
@@ -452,13 +495,12 @@ check_box无相关病史`;
           </div>
         </div>
 
-        <h2>三、分维度解读与改善建议</h2>
-        ${createAdviceBlock('卵巢储备', scores.reserve, data, '需持续关注')}
-        ${createAdviceBlock('卵子/胚胎潜力', scores.eggEmbryo, data, '建议复盘')}
-        ${createAdviceBlock('精子因素', scores.sperm, data, '同步管理')}
-        ${createAdviceBlock('子宫环境', scores.uterus, data, '优先处理')}
-        ${createAdviceBlock('生活/情绪', scores.lifestyle, data, '基础干预')}
-        ${createAdviceBlock('激素代谢', scores.hormone, data, '持续追踪')}
+        <h2>三、个性化改善建议</h2>
+        <div class="advice-card">
+          <h3>总评</h3>
+          <p><strong>${overallAdviceSummary(scores)}</strong></p>
+          <ul>${buildTopAdvice(scores, data).map(x => `<li>${x}</li>`).join('')}</ul>
+        </div>
 
         <div class="footer-note">说明：本工具为辅助评估模板，基于问卷文本中的已识别字段自动生成。报告可人工继续润色，用于咨询前准备或医生沟通提纲，不替代正式医疗诊断。</div>
       `;
