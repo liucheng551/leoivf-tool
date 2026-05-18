@@ -398,17 +398,17 @@ check_box无相关病史`;
       const labels = ['卵巢储备','卵子/胚胎潜力','精子因素','子宫环境','生活方式与情绪','激素与代谢'];
       const vals = [scores.reserve, scores.eggEmbryo, scores.sperm, scores.uterus, scores.lifestyle, scores.hormone];
       return `
-        <h1>IVF 综合生育力评估报告</h1>
+        <h1>试管综合评估报告</h1>
         <div class="meta-line">姓名：${data.name}　｜　年龄：${data.ageLabel}　｜　评估日期：${getToday()}${sourceUrl ? `　｜　结果链接：${sourceUrl}` : ''}</div>
         <p class="muted">本报告基于你在 LEOIVF 完成的问卷结果，用于帮助你看清当前生育力画像与下一步可优化方向。</p>
 
-        <h2>一、当前整体成功率区间</h2>
+        <h2>一、整体成功率预测</h2>
         <div class="success-box">
-          <div class="pill">综合档位：${levelLabel(success.successRate)}</div>
+          <div class="pill">综合档位：${levelLabel(success.successRate)} ｜ 预测成功率：${success.successRate}%</div>
           <div class="success-layout">
             <div>
-              <p><strong>综合年龄、卵巢储备、既往胚胎表现、子宫环境及生活方式等因素，当前下一次 IVF 的整体成功机会处于“${levelText(success.successRate)}”区间。</strong></p>
-              <p>通过针对性改善子宫环境和生活方式，这个区间仍有上调空间。</p>
+              <p><strong>综合年龄、卵巢储备、既往胚胎表现、子宫环境及生活方式等因素，当前下一次 IVF 的整体成功率预测约为 ${success.successRate}%，目前处于“${levelText(success.successRate)}”等级。</strong></p>
+              <p>通过针对性指导、改善和调理后，成功率仍有较大上升空间。</p>
             </div>
             <div class="progress-box">
               <div class="progress">
@@ -421,7 +421,8 @@ check_box无相关病史`;
         </div>
         <p class="muted">说明：此区间用于辅助决策，不是对个人精确妊娠率的预测。</p>
 
-        <h2>二、生育关键维度雷达</h2>
+        <h2>二、当前生育力画像</h2>
+        <p class="muted">该画像用于帮助你快速看清当前影响试管成功率的关键环节。评分范围为 1–5 分，5 分代表当前资料下相对有利，1 分代表该维度存在较明显短板或需要优先补强。</p>
         <div class="radar-section">
           <div class="radar-wrap"><canvas id="radarCanvas"></canvas></div>
           <div>
