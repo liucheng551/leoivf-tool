@@ -8,138 +8,52 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f3f6f8;
-      color: #1f2937;
-    }
-    .page {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 20px;
-      display: grid;
-      grid-template-columns: 420px 1fr;
-      gap: 20px;
-    }
-    .panel, .preview {
-      background: #fff;
-      border-radius: 14px;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-      padding: 18px;
-    }
-    h1 { font-size: 24px; margin: 0 0 12px; }
-    h2 { font-size: 18px; margin: 22px 0 10px; }
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f3f6f8; color: #1f2937; }
+    .page { max-width: 1320px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 430px 1fr; gap: 20px; }
+    .panel, .preview { background: #fff; border-radius: 16px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); padding: 18px; }
+    h1 { font-size: 26px; margin: 0 0 12px; }
+    h2 { font-size: 20px; margin: 24px 0 12px; }
     h3 { font-size: 16px; margin: 16px 0 8px; }
-    .muted { color: #6b7280; font-size: 13px; line-height: 1.6; }
+    p { line-height: 1.7; }
+    .muted { color: #6b7280; font-size: 13px; line-height: 1.7; }
     label { display: block; font-size: 14px; font-weight: 600; margin: 14px 0 6px; }
-    input, textarea {
-      width: 100%;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 14px;
-      font-family: inherit;
-    }
-    textarea {
-      min-height: 360px;
-      resize: vertical;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      line-height: 1.45;
-    }
-    .btn-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 16px;
-    }
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 10px 16px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-    }
+    input, textarea { width: 100%; border: 1px solid #d1d5db; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-family: inherit; }
+    textarea { min-height: 360px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; line-height: 1.45; }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    button { border: none; border-radius: 999px; padding: 10px 16px; font-size: 14px; font-weight: 600; cursor: pointer; }
     .primary { background: #0f766e; color: #fff; }
     .secondary { background: #e5e7eb; color: #111827; }
     .danger { background: #b91c1c; color: #fff; }
-    .report {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 24px;
-      min-height: 720px;
-    }
-    .report[contenteditable="true"]:focus {
-      outline: 2px solid #99f6e4;
-    }
-    .hero-box {
-      background: #edf7f7;
-      border: 1px solid #cfe8e8;
-      border-radius: 12px;
-      padding: 16px;
-      margin: 12px 0 18px;
-    }
-    .score-badge {
-      display: inline-block;
-      background: #0f766e;
-      color: #fff;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      margin-bottom: 10px;
-    }
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin: 14px 0;
-    }
-    .card {
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 12px;
-    }
-    .card .label { font-size: 12px; color: #6b7280; }
-    .card .value { font-size: 20px; font-weight: 700; margin-top: 4px; }
-    .radar-wrap {
-      max-width: 420px;
-      margin: 12px auto 20px;
-    }
-    ul { padding-left: 20px; line-height: 1.7; }
-    .small { font-size: 12px; color: #6b7280; }
-    .footer-note {
-      margin-top: 22px;
-      padding-top: 12px;
-      border-top: 1px solid #e5e7eb;
-      color: #6b7280;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-    @media (max-width: 980px) {
-      .page { grid-template-columns: 1fr; }
-    }
-    @media print {
-      .panel { display: none; }
-      .page { display: block; padding: 0; }
-      .preview { box-shadow: none; padding: 0; }
-      .report { border: none; }
-    }
+    .report { background: #fff; border: 1px solid #d9f0ec; border-radius: 16px; padding: 26px; min-height: 760px; }
+    .topbar { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; margin: 14px 0 18px; }
+    .info-box, .score-box, .mini-card, .dim-card, .action-card { background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 14px; padding: 14px; }
+    .hero-box { background: #edf7f7; border: 1px solid #cfe8e8; border-radius: 16px; padding: 18px; margin: 14px 0 18px; }
+    .pill { display: inline-block; background: #0f766e; color: #fff; padding: 6px 10px; border-radius: 999px; font-size: 13px; margin-bottom: 10px; }
+    .small-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 14px 0 18px; }
+    .mini-label { font-size: 12px; color: #6b7280; }
+    .mini-value { font-size: 22px; font-weight: 700; margin-top: 4px; }
+    .radar-wrap { max-width: 430px; margin: 12px auto 20px; }
+    .dim-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .dim-score { font-size: 28px; font-weight: 700; color: #0f766e; }
+    .dim-sub { font-size: 12px; color: #6b7280; margin-top: 2px; }
+    .action-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    ul { padding-left: 20px; line-height: 1.8; }
+    .footer-note { margin-top: 22px; padding-top: 12px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 12px; line-height: 1.7; }
+    @media (max-width: 980px) { .page { grid-template-columns: 1fr; } .small-grid, .dim-grid, .action-grid, .topbar { grid-template-columns: 1fr; } }
+    @media print { .panel { display: none; } .page { display: block; padding: 0; } .preview { box-shadow: none; padding: 0; } .report { border: none; } }
   </style>
 </head>
 <body>
   <div class="page">
     <section class="panel">
       <h1>LEOIVF 报告生成工具</h1>
-      <div class="muted">把 Kajabi 结果页复制出来的全文粘贴到下面，工具会自动识别关键字段、计算成功率、生成 6 维度雷达，并输出可编辑报告。</div>
+      <div class="muted">已按你当前流程更新：支持从 Assessment 结果文本中识别“你的姓名是？”，并按 3 大模块生成专属报告。</div>
 
       <label for="sourceUrl">结果链接（可选，仅记录）</label>
       <input id="sourceUrl" type="text" placeholder="粘贴 Kajabi Assessment 结果链接" />
 
-      <label for="rawText">结果页复制文本</label>
-      <textarea id="rawText" placeholder="把 Kajabi assessment result 页面复制出来的全文粘贴到这里"></textarea>
+      <label for="rawText">Assessment 结果全文</label>
+      <textarea id="rawText" placeholder="把 Assessment 结果页复制出来的全文粘贴到这里"></textarea>
 
       <div class="btn-row">
         <button class="primary" id="generateBtn">生成报告</button>
@@ -148,19 +62,22 @@
         <button class="danger" id="clearBtn">清空</button>
       </div>
 
-      <p class="small">提示：生成后右侧报告内容可以直接手动修改，再下载 PDF。</p>
+      <p class="muted">新版结构：1）试管成功率；2）关键生育力指标（6维度，每项 5 分制）；3）个性化行动与改善建议（4小模块）。</p>
     </section>
 
     <section class="preview">
       <div id="report" class="report" contenteditable="true">
         <h2>报告预览区</h2>
-        <p class="muted">请先在左侧粘贴结果文本，然后点击“生成报告”。</p>
+        <p class="muted">请先在左侧粘贴 Assessment 结果文本，然后点击“生成报告”。</p>
       </div>
     </section>
   </div>
 
   <script>
     const sampleText = `Results Breakdown
+你的姓名是？
+Your Answer
+张三
 你目前的年龄是？
 Your Answer
 check_box≤33岁
@@ -248,20 +165,39 @@ check_box无相关病史`;
 
     let radarChart = null;
 
-    function findAnswer(text, question) {
-      const normalized = text.replace(/\r/g, '');
+    function normalizeText(text) {
+      return text.replace(/\r/g, '');
+    }
+
+    function findCheckboxAnswer(text, question) {
+      const normalized = normalizeText(text);
       const idx = normalized.indexOf(question);
       if (idx === -1) return '';
-      const slice = normalized.slice(idx, idx + 240);
+      const slice = normalized.slice(idx, idx + 260);
       const match = slice.match(/check_box([^\n]+)/);
       return match ? match[1].trim() : '';
     }
 
+    function findPlainAnswer(text, question) {
+      const lines = normalizeText(text).split('\n').map(v => v.trim());
+      const idx = lines.findIndex(v => v === question);
+      if (idx === -1) return '';
+      for (let i = idx + 1; i < Math.min(lines.length, idx + 6); i++) {
+        const line = lines[i];
+        if (!line || line === 'Your Answer') continue;
+        if (line.startsWith('check_box')) return line.replace('check_box', '').trim();
+        return line.trim();
+      }
+      return '';
+    }
+
     function parseText(text) {
-      const ageAnswer = findAnswer(text, '你目前的年龄是？');
+      const name = findPlainAnswer(text, '你的姓名是？') || '未填写';
+
+      const ageAnswer = findCheckboxAnswer(text, '你目前的年龄是？');
       const ageInfo = ageMap.find(item => ageAnswer.includes(item.key)) || { value: 38, band: 'A4', label: '38–40岁' };
 
-      const amhAnswer = findAnswer(text, '你最近一次检测的AMH值是多少？');
+      const amhAnswer = findCheckboxAnswer(text, '你最近一次检测的AMH值是多少？');
       let amh = 1.0;
       if (amhAnswer.includes('≥2.0')) amh = 2.1;
       else if (amhAnswer.includes('1.5')) amh = 1.7;
@@ -269,7 +205,7 @@ check_box无相关病史`;
       else if (amhAnswer.includes('0.7')) amh = 0.8;
       else if (amhAnswer.includes('<0.7')) amh = 0.6;
 
-      const afcAnswer = findAnswer(text, '最近一次基础窦卵泡数（AFC）是多少？');
+      const afcAnswer = findCheckboxAnswer(text, '最近一次基础窦卵泡数（AFC）是多少？');
       let afc = 5;
       if (afcAnswer.includes('≥15')) afc = 16;
       else if (afcAnswer.includes('10–14') || afcAnswer.includes('10-14')) afc = 12;
@@ -277,7 +213,7 @@ check_box无相关病史`;
       else if (afcAnswer.includes('3–4') || afcAnswer.includes('3-4')) afc = 3;
       else if (afcAnswer.includes('≤3') || afcAnswer.includes('<3')) afc = 2;
 
-      const fshAnswer = findAnswer(text, '你的基础FSH值（月经第2–3天）是多少？');
+      const fshAnswer = findCheckboxAnswer(text, '你的基础FSH值（月经第2–3天）是多少？');
       let fsh = 9;
       if (fshAnswer.includes('<8')) fsh = 7;
       else if (fshAnswer.includes('8–9.9') || fshAnswer.includes('8-9.9')) fsh = 9;
@@ -285,30 +221,31 @@ check_box无相关病史`;
       else if (fshAnswer.includes('≥12')) fsh = 12.5;
 
       return {
+        name,
         age: ageInfo.value,
         ageBand: ageInfo.band,
         ageLabel: ageInfo.label,
         amh,
         afc,
         fsh,
-        embryoRatio: findAnswer(text, '若你做过IVF，既往周期的优质胚胎（3BB以上）比例大概是多少？'),
-        miscarriage: findAnswer(text, '你有过几次不明原因自然流产或胚胎停育？'),
-        pgt: findAnswer(text, '是否做过PGT（胚胎染色体检测）？'),
-        semen: findAnswer(text, '伴侣最近一次精液常规结果如何？'),
-        morphology: findAnswer(text, '精子形态正常率是多少？（Kruger严格标准）'),
-        dfi: findAnswer(text, '最近一次精子 DNA 碎片率（DFI）结果如何？'),
-        uterusIssue: findAnswer(text, '是否发现子宫结构异常？'),
-        adenomyosis: findAnswer(text, '是否有子宫腺肌症或高度怀疑？'),
-        endometrium: findAnswer(text, '最近B超的内膜厚度情况如何？'),
-        adhesion: findAnswer(text, '是否有宫腔粘连史或宫腔镜手术史？'),
-        sleep: findAnswer(text, '平均每晚睡眠时长及质量如何？'),
-        exercise: findAnswer(text, '你目前的运动习惯是？'),
-        diet: findAnswer(text, '你的饮食习惯整体如何？'),
-        mood: findAnswer(text, '你的情绪状态整体如何？'),
-        tsh: findAnswer(text, '最近一次甲状腺功能检查（TSH 为主）结果如何？'),
-        glucose: findAnswer(text, '是否有胰岛素抵抗或血糖偏高问题？'),
-        lipid: findAnswer(text, '是否有血脂异常（高胆固醇/高甘油三酯）？'),
-        immune: findAnswer(text, '是否有凝血或免疫相关异常史（如APS、易栓症）？')
+        embryoRatio: findCheckboxAnswer(text, '若你做过IVF，既往周期的优质胚胎（3BB以上）比例大概是多少？'),
+        miscarriage: findCheckboxAnswer(text, '你有过几次不明原因自然流产或胚胎停育？'),
+        pgt: findCheckboxAnswer(text, '是否做过PGT（胚胎染色体检测）？'),
+        semen: findCheckboxAnswer(text, '伴侣最近一次精液常规结果如何？'),
+        morphology: findCheckboxAnswer(text, '精子形态正常率是多少？（Kruger严格标准）'),
+        dfi: findCheckboxAnswer(text, '最近一次精子 DNA 碎片率（DFI）结果如何？'),
+        uterusIssue: findCheckboxAnswer(text, '是否发现子宫结构异常？'),
+        adenomyosis: findCheckboxAnswer(text, '是否有子宫腺肌症或高度怀疑？'),
+        endometrium: findCheckboxAnswer(text, '最近B超的内膜厚度情况如何？'),
+        adhesion: findCheckboxAnswer(text, '是否有宫腔粘连史或宫腔镜手术史？'),
+        sleep: findCheckboxAnswer(text, '平均每晚睡眠时长及质量如何？'),
+        exercise: findCheckboxAnswer(text, '你目前的运动习惯是？'),
+        diet: findCheckboxAnswer(text, '你的饮食习惯整体如何？'),
+        mood: findCheckboxAnswer(text, '你的情绪状态整体如何？'),
+        tsh: findCheckboxAnswer(text, '最近一次甲状腺功能检查（TSH 为主）结果如何？'),
+        glucose: findCheckboxAnswer(text, '是否有胰岛素抵抗或血糖偏高问题？'),
+        lipid: findCheckboxAnswer(text, '是否有血脂异常（高胆固醇/高甘油三酯）？'),
+        immune: findCheckboxAnswer(text, '是否有凝血或免疫相关异常史（如APS、易栓症）？')
       };
     }
 
@@ -322,14 +259,10 @@ check_box无相关病史`;
 
     function calcSuccessRate(data) {
       const reserve = reserveBand(data.amh, data.afc);
-      return {
-        reserveBand: reserve.band,
-        reserveLabel: reserve.label,
-        successRate: successMatrix[reserve.band][data.ageBand]
-      };
+      return { reserveBand: reserve.band, reserveLabel: reserve.label, successRate: successMatrix[reserve.band][data.ageBand] };
     }
 
-    function calcRadar(data) {
+    function calcRadar100(data) {
       let lifestyle = 78;
       if (data.sleep.includes('6–7小时') || data.sleep.includes('6-7小时')) lifestyle -= 6;
       if (data.exercise.includes('几乎不运动')) lifestyle -= 18;
@@ -367,104 +300,135 @@ check_box无相关病史`;
       if (data.morphology.includes('2–3.9') || data.morphology.includes('2-3.9')) history -= 8;
       if (data.dfi.includes('≤15')) history += 3;
 
-      const normalize = v => Math.max(20, Math.min(95, Math.round(v)));
-      const result = {
-        lifestyle: normalize(lifestyle),
-        ovary: normalize(ovary),
-        uterus: normalize(uterus),
-        endocrine: normalize(endocrine),
-        immune: normalize(immune),
-        history: normalize(history)
-      };
-      return result;
+      const norm = v => Math.max(20, Math.min(95, Math.round(v)));
+      return { lifestyle: norm(lifestyle), ovary: norm(ovary), uterus: norm(uterus), endocrine: norm(endocrine), immune: norm(immune), history: norm(history) };
+    }
+
+    function score5(v) {
+      if (v >= 85) return 5;
+      if (v >= 70) return 4;
+      if (v >= 55) return 3;
+      if (v >= 40) return 2;
+      return 1;
+    }
+
+    function buildDimensionCards(scores100) {
+      const dims = [
+        { key: 'lifestyle', title: '生活方式与情绪', desc: '睡眠、运动、饮食与情绪稳定度。' },
+        { key: 'ovary', title: '卵巢功能与卵子', desc: '主要参考年龄、AMH、AFC 与 FSH。' },
+        { key: 'uterus', title: '子宫环境与内膜', desc: '聚焦宫腔结构、内膜条件与着床环境。' },
+        { key: 'endocrine', title: '内分泌与代谢', desc: '关注甲状腺、血糖、胰岛素与血脂状态。' },
+        { key: 'immune', title: '免疫 / 凝血风险', desc: '用于识别是否存在需进一步排查的系统性风险。' },
+        { key: 'history', title: '既往 IVF 周期结果', desc: '综合既往胚胎表现与男方相关信息。' }
+      ];
+      return dims.map(d => `
+        <div class="dim-card">
+          <div><strong>${d.title}</strong></div>
+          <div class="dim-score">${score5(scores100[d.key])}<span style="font-size:15px;font-weight:600;color:#6b7280;"> / 5</span></div>
+          <div class="dim-sub">${d.desc}</div>
+        </div>
+      `).join('');
+    }
+
+    function getToday() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
     }
 
     function rateLabel(rate) {
       if (rate <= 10) return '极低';
       if (rate <= 25) return '偏低';
       if (rate <= 45) return '中等';
-      if (rate <= 60) return '偏高';
-      return '较高';
+      return '偏高';
     }
 
-    function buildSuggestions(scores, data) {
-      const items = [];
-      if (scores.uterus < 65) {
-        items.push('子宫环境与内膜是当前最需要优先处理的环节。若存在息肉、小肌瘤待处理或内膜偏薄，建议与生殖医生讨论是否先完成宫腔评估/处理，再进入下一次移植或促排周期。');
-      }
-      if (scores.lifestyle < 65) {
-        items.push('生活方式与情绪维度存在明显优化空间。建议先把睡眠、规律运动和饮食结构作为未来 6–8 周的基础任务，同时加入焦虑管理，以减少对内分泌和治疗依从性的影响。');
-      }
-      if (scores.endocrine < 70) {
-        items.push('内分泌与代谢方面建议继续巩固血糖、血脂等指标的控制，尽量在下个治疗周期前复查并拿到更稳定的数据结果。');
-      }
-      if (scores.history < 65) {
-        items.push('既往 IVF 结果提示需要做更系统的复盘。建议重点复盘胚胎形成率、优质胚胎率、是否需要补做 PGT，以及男方因素对胚胎质量的潜在影响。');
-      }
-      if (scores.ovary < 65) {
-        items.push('卵巢功能与卵子潜力提示可用卵子数量或反应性存在限制，下一步更适合采用“现实预期 + 优化策略”并行的方式，而不是单纯增加尝试次数。');
-      }
-      if (scores.immune < 70 && !data.immune.includes('无相关病史')) {
-        items.push('若既往存在免疫或凝血相关提示，建议在进入下一周期前进行更明确的分层评估，避免遗漏影响着床或早期妊娠维持的因素。');
-      }
-      if (items.length < 3) {
-        items.push('目前最合理的路径不是盲目立即重复同方案，而是先把可明确优化的环节做成一份 1–3 个月行动计划，再进入下一次 IVF/移植准备。');
-      }
-      return items;
+    function actionModules(scores100, data) {
+      const med = [];
+      if (scores100.uterus < 70) med.push('建议与医生讨论是否先完成宫腔评估、息肉/肌瘤处理及内膜优化后，再进入下一阶段移植或促排。');
+      if (scores100.immune < 70) med.push('如既往存在免疫或凝血相关提示，可考虑补充更有针对性的排查，明确是否需要分层管理。');
+      if (scores100.history < 65) med.push('若既往优质胚胎率偏低或存在反复失败，可考虑补充对胚胎质量及男方因素更精细的评估。');
+      if (med.length === 0) med.push('目前未见必须立即追加的大项排查，但进入新周期前仍建议核对宫腔、内膜与基础代谢指标是否最新。');
+
+      const lifestyle = [];
+      lifestyle.push('优先把睡眠稳定到每晚 7–8 小时，建立固定上床和起床节律。');
+      if (data.exercise.includes('几乎不运动')) lifestyle.push('从每周 2–3 次中等强度运动开始，先追求稳定，再追求强度。');
+      if (data.diet.includes('不规律')) lifestyle.push('把饮食调整为规律三餐、蛋白质优先、减少高糖高加工食物。');
+      lifestyle.push('营养方向上建议优先保证蛋白质、铁、叶酸、维生素D与整体抗炎饮食结构。');
+
+      const doctor = [];
+      doctor.push('下次复诊时建议直接带着这份报告，围绕“哪一环最限制成功率”进行沟通。');
+      if (scores100.history < 70) doctor.push('重点复盘既往促排反应、受精率、胚胎形成率、优质胚胎率以及是否需要调整实验室或移植策略。');
+      if (data.pgt.includes('建议做但未做')) doctor.push('如果医生曾建议 PGT，可进一步确认当时建议的理由，以及当前是否仍然适合。');
+      doctor.push('沟通时尽量要求医生给出分阶段计划，而不是只得到“继续试一次”的笼统结论。');
+
+      const stress = [];
+      if (data.mood.includes('经常焦虑')) stress.push('当前情绪压力已值得被单独管理，建议把压力管理视为治疗准备的一部分，而不是附属事项。');
+      stress.push('建议加入每天 10–15 分钟的低门槛减压动作，如呼吸训练、散步、正念或书写式梳理。');
+      stress.push('把治疗中的不确定感拆成清单：已确定、待确认、不可控三类，可明显降低心理负荷。');
+
+      return { med, lifestyle, doctor, stress };
     }
 
-    function createReport(data, success, scores, sourceUrl) {
-      const level = rateLabel(success.successRate);
-      const suggestions = buildSuggestions(scores, data);
+    function createReport(data, success, scores100, sourceUrl) {
+      const actions = actionModules(scores100, data);
       return `
-        <h1>IVF 综合生育力评估报告</h1>
-        <p class="muted">本报告基于你在 LEOIVF Assessment 的结果文本生成，用于帮助你理解当前整体成功率区间、关键影响维度及下一步优化方向。</p>
+        <h1>IVF 综合生育力专属评估报告</h1>
+        <p class="muted">本报告基于你在 Assessment 中提交的结果文本生成，围绕试管成功率、关键生育力指标与行动建议三个模块进行整理。</p>
 
-        <div class="hero-box">
-          <div class="score-badge">综合档位：${level}</div>
-          <p><strong>综合年龄、卵巢储备、既往胚胎表现、子宫环境及生活方式等因素，当前下一次 IVF 周期的整体成功率约为 ${success.successRate}% 。</strong></p>
-          <p>年龄挡位：${data.ageLabel}；卵巢储备挡位：${success.reserveLabel}。该结果用于辅助决策，不代表对单次结局的精确预测。</p>
-          ${sourceUrl ? `<p class="small">原始结果链接：${sourceUrl}</p>` : ''}
+        <div class="topbar">
+          <div class="info-box">
+            <div class="mini-label">专属基本信息</div>
+            <p><strong>姓名：</strong>${data.name}</p>
+            <p><strong>年龄：</strong>${data.ageLabel}</p>
+            <p><strong>评估日期：</strong>${getToday()}</p>
+            ${sourceUrl ? `<p><strong>结果链接：</strong>${sourceUrl}</p>` : ''}
+          </div>
+          <div class="score-box hero-box">
+            <div class="pill">试管成功率档位：${rateLabel(success.successRate)}</div>
+            <p><strong>综合年龄、卵巢储备、既往胚胎表现、子宫环境及生活方式等因素，当前下一次 IVF 周期的整体成功率约为 ${success.successRate}% 。</strong></p>
+            <p>年龄挡位：${data.ageLabel}；卵巢储备挡位：${success.reserveLabel}。该结果用于辅助决策，不代表对单次结局的精确预测。</p>
+          </div>
         </div>
 
-        <div class="summary-grid">
-          <div class="card"><div class="label">年龄</div><div class="value">${data.ageLabel}</div></div>
-          <div class="card"><div class="label">AMH / AFC</div><div class="value">${data.amh} / ${data.afc}</div></div>
-          <div class="card"><div class="label">基础 FSH</div><div class="value">${data.fsh}</div></div>
-          <div class="card"><div class="label">成功率区间</div><div class="value">${success.successRate}%</div></div>
+        <div class="small-grid">
+          <div class="mini-card"><div class="mini-label">姓名</div><div class="mini-value">${data.name}</div></div>
+          <div class="mini-card"><div class="mini-label">AMH / AFC</div><div class="mini-value">${data.amh} / ${data.afc}</div></div>
+          <div class="mini-card"><div class="mini-label">基础 FSH</div><div class="mini-value">${data.fsh}</div></div>
+          <div class="mini-card"><div class="mini-label">成功率</div><div class="mini-value">${success.successRate}%</div></div>
         </div>
 
-        <h2>一、当前综合生育力雷达</h2>
+        <h2>一、试管成功率</h2>
+        <p>当前的基础成功率来自年龄挡位与卵巢储备挡位的交叉评估，并结合既往胚胎表现、子宫环境和生活方式作解释性判断。对当前结果而言，最主要的限制因素并不一定只有卵巢功能，还可能来自子宫内膜、生活方式和既往周期表现等环节。</p>
+
+        <h2>二、关键生育力指标</h2>
         <div class="radar-wrap"><canvas id="radarCanvas"></canvas></div>
-        <ul>
-          <li><strong>生活方式与情绪：</strong>${scores.lifestyle} 分</li>
-          <li><strong>卵巢功能与卵子：</strong>${scores.ovary} 分</li>
-          <li><strong>子宫环境与内膜：</strong>${scores.uterus} 分</li>
-          <li><strong>内分泌与代谢：</strong>${scores.endocrine} 分</li>
-          <li><strong>免疫/凝血风险：</strong>${scores.immune} 分</li>
-          <li><strong>既往 IVF 周期结果：</strong>${scores.history} 分</li>
-        </ul>
+        <div class="dim-grid">${buildDimensionCards(scores100)}</div>
 
-        <h2>二、主要发现</h2>
-        <ul>
-          <li>你的年龄与卵巢储备组合对应当前成功率基线，其中年龄处于 <strong>${data.ageLabel}</strong>，卵巢储备评估为 <strong>${success.reserveLabel}</strong>。</li>
-          <li>子宫环境方面目前最值得关注的是：${data.uterusIssue || '未提取到明确异常'}；内膜情况为：${data.endometrium || '未提取到'}。</li>
-          <li>生活方式相关结果显示：睡眠为“${data.sleep || '未提取到'}”，运动为“${data.exercise || '未提取到'}”，饮食为“${data.diet || '未提取到'}”，情绪状态为“${data.mood || '未提取到'}”。</li>
-          <li>代谢与全身状态方面：TSH/甲状腺为“${data.tsh || '未提取到'}”，血糖为“${data.glucose || '未提取到'}”，血脂为“${data.lipid || '未提取到'}”。</li>
-          <li>既往 IVF / 胚胎信息中，优质胚胎比例为“${data.embryoRatio || '未提取到'}”，PGT 状态为“${data.pgt || '未提取到'}”。</li>
-        </ul>
-
-        <h2>三、个性化建议</h2>
-        <ul>
-          ${suggestions.map(item => `<li>${item}</li>`).join('')}
-        </ul>
-
-        <h2>四、下一步行动方向</h2>
-        <p>建议把接下来 1–3 个月作为“系统复盘 + 重点优化”阶段，而不是直接重复上一次路径。优先顺序通常可按：子宫/内膜问题处理 → 生活方式与情绪稳定 → 代谢指标再校正 → 周期方案复盘与是否补做检查。</p>
-        <p>如果你计划较快进入下一次 IVF，可把本报告作为与你的生殖医生沟通的提纲，并在此基础上人工补充病史、实验室结果和既往周期细节。</p>
+        <h2>三、个性化行动与改善建议</h2>
+        <div class="action-grid">
+          <div class="action-card">
+            <h3>1）补充检测与医学评估</h3>
+            <ul>${actions.med.map(x => `<li>${x}</li>`).join('')}</ul>
+          </div>
+          <div class="action-card">
+            <h3>2）生活方式与营养</h3>
+            <ul>${actions.lifestyle.map(x => `<li>${x}</li>`).join('')}</ul>
+          </div>
+          <div class="action-card">
+            <h3>3）医生沟通与方案复盘</h3>
+            <ul>${actions.doctor.map(x => `<li>${x}</li>`).join('')}</ul>
+          </div>
+          <div class="action-card">
+            <h3>4）情绪与压力管理</h3>
+            <ul>${actions.stress.map(x => `<li>${x}</li>`).join('')}</ul>
+          </div>
+        </div>
 
         <div class="footer-note">
-          说明：本工具为配置化辅助评估版本，基于问卷文本中的已识别字段自动生成，不替代面对面医疗诊断。报告生成后可手动修改，用于内部咨询或客户沟通前的初稿整理。
+          说明：本工具为配置化辅助评估版本，基于问卷文本中的已识别字段自动生成。报告可继续人工润色，用于咨询前准备或医生沟通提纲，不替代正式医疗诊断。
         </div>
       `;
     }
@@ -485,21 +449,13 @@ check_box无相关病史`;
             backgroundColor: 'rgba(15, 118, 110, 0.2)',
             borderColor: 'rgba(15, 118, 110, 1)',
             pointBackgroundColor: 'rgba(15, 118, 110, 1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(15, 118, 110, 1)'
+            pointBorderColor: '#fff'
           }]
         },
         options: {
           responsive: true,
           plugins: { legend: { display: false } },
-          scales: {
-            r: {
-              suggestedMin: 20,
-              suggestedMax: 100,
-              ticks: { stepSize: 20 }
-            }
-          }
+          scales: { r: { suggestedMin: 20, suggestedMax: 100, ticks: { stepSize: 20 } } }
         }
       });
     }
@@ -511,29 +467,23 @@ check_box无相关病史`;
     document.getElementById('clearBtn').addEventListener('click', () => {
       document.getElementById('sourceUrl').value = '';
       document.getElementById('rawText').value = '';
-      document.getElementById('report').innerHTML = '<h2>报告预览区</h2><p class="muted">请先在左侧粘贴结果文本，然后点击“生成报告”。</p>';
-      if (radarChart) {
-        radarChart.destroy();
-        radarChart = null;
-      }
+      document.getElementById('report').innerHTML = '<h2>报告预览区</h2><p class="muted">请先在左侧粘贴 Assessment 结果文本，然后点击“生成报告”。</p>';
+      if (radarChart) { radarChart.destroy(); radarChart = null; }
     });
 
     document.getElementById('generateBtn').addEventListener('click', () => {
       const rawText = document.getElementById('rawText').value.trim();
       const sourceUrl = document.getElementById('sourceUrl').value.trim();
-      if (!rawText) {
-        alert('请先粘贴 Kajabi 结果文本。');
-        return;
-      }
+      if (!rawText) { alert('请先粘贴 Assessment 结果文本。'); return; }
       try {
         const data = parseText(rawText);
         const success = calcSuccessRate(data);
-        const scores = calcRadar(data);
-        document.getElementById('report').innerHTML = createReport(data, success, scores, sourceUrl);
-        setTimeout(() => renderRadar(scores), 50);
+        const scores100 = calcRadar100(data);
+        document.getElementById('report').innerHTML = createReport(data, success, scores100, sourceUrl);
+        setTimeout(() => renderRadar(scores100), 50);
       } catch (e) {
         console.error(e);
-        alert('生成失败，请检查文本格式是否接近 Kajabi 结果页复制内容。');
+        alert('生成失败，请检查文本格式是否接近 Assessment 结果页复制内容。');
       }
     });
 
