@@ -12,7 +12,7 @@
     .page { max-width: 1320px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 430px 1fr; gap: 20px; }
     .panel, .preview { background: #fff; border-radius: 16px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); padding: 18px; }
     h1 { font-size: 28px; margin: 0 0 8px; text-align:center; }
-    h2 { font-size: 17px; margin: 18px 0 10px; display:flex; align-items:baseline; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+    h2 { font-size: 17px; margin: 18px 0 6px; }
     h3 { font-size: 16px; margin: 0 0 12px; }
     p { line-height: 1.7; }
     .muted { color: #6b7280; font-size: 13px; line-height: 1.7; }
@@ -42,7 +42,7 @@
     .radar-section { display: grid; grid-template-columns: 270px 1fr; gap: 14px; align-items: center; }
     .radar-wrap { max-width: 250px; margin: 0 auto; }
     .dim-list { padding-left: 18px; line-height: 1.65; margin: 0; }
-    .advice-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; }
+    .advice-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 8px 12px; margin-bottom: 8px; }
     .tag { float: right; background: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 999px; font-size: 12px; }
     .footer-note { margin-top: 14px; padding-top: 10px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 11px; line-height: 1.5; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
     @media (max-width: 980px) {
@@ -462,9 +462,8 @@ check_box无相关病史`;
       return `
         <h1>试管综合评估报告</h1>
         <div class="meta-line">姓名：${data.name}　｜　年龄：${data.ageLabel}　｜　评估日期：${getToday()}${sourceUrl ? `　｜　结果链接：${sourceUrl}` : ''}</div>
-        <p class="muted">本报告基于你在 LEOIVF 完成的问卷结果生成。</p>
-
-        <h2>一、整体成功率预测 <span class="inline-note"></span></h2>
+        <p class="muted"><h2>一、整体成功率预测</h2>
+        <p class="section-note">说明：此区间用于辅助决策，不是对个人精确妊娠率的预测。</p>
         <div class="success-box">
           <div class="pill">综合档位：${levelLabel(success.successRate)} ｜ 预测成功率：${success.successRate}%</div>
           <div class="success-layout">
@@ -481,7 +480,7 @@ check_box无相关病史`;
             </div>
           </div>
         </div>
-        <p class="muted"></p>
+        <p class="muted">说明：此区间用于辅助决策，不是对个人精确妊娠率的预测。</p>
 
         <h2>二、当前生育力画像</h2>
         <p class="muted">以下画像用于识别当前最值得优先优化的关键环节。</p>
@@ -491,7 +490,7 @@ check_box无相关病史`;
             <ul class="dim-list">
               ${labels.map((label, i) => `<li><strong>${label}</strong>：${score5(vals[i])} 分。</li>`).join('')}
             </ul>
-
+            <p class="score-note">每个维度最高是5分，最低是1分，得分越低越需要重视和优化。</p>
           </div>
         </div>
 
