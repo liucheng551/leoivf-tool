@@ -10,7 +10,7 @@
     * { box-sizing: border-box; }
     body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f3f6f8; color: #1f2937; }
     .page { max-width: 1320px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 430px 1fr; gap: 20px; }
-    .panel, .preview { background: #fff; border-radius: 16px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); padding: 18px; }
+    .panel, .preview { background: #fff; border-radius: 16px; box-shadow: none; padding: 12px 20px 12px 12px; box-sizing: border-box; }
     h1 { font-size: 28px; margin: 0 0 8px; text-align:center; }
     h2 { font-size: 17px; margin: 18px 0 6px; }
     .section-title { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
@@ -27,7 +27,8 @@
     .primary { background: #0f766e; color: #fff; }
     .secondary { background: #e5e7eb; color: #111827; }
     .danger { background: #b91c1c; color: #fff; }
-    .report { background: #fff; border: 1px solid #d9f0ec; border-radius: 16px; padding: 18px 24px 22px; min-height: 760px; box-sizing: border-box; }
+    .report { position: relative; background: #fff; border: none; border-radius: 16px; padding: 18px 26px 22px 24px; min-height: 760px; box-sizing: border-box; box-shadow: inset 0 0 0 1.5px #d9f0ec; overflow: visible; }
+    .report::after { content: ""; position: absolute; inset: 0; border-radius: 16px; box-shadow: inset 0 0 0 1.5px #d9f0ec; pointer-events: none; }
     .meta-line { color: #6b7280; font-size: 14px; margin-bottom: 8px; text-align:center; }
     .success-box { background: #eaf7f7; border: 1px solid #b9dddd; border-radius: 12px; padding: 10px 12px; }
     .pill { display: inline-block; background: #0f766e; color: #fff; padding: 5px 10px; border-radius: 999px; font-size: 12px; margin-bottom: 10px; }
@@ -52,11 +53,15 @@
       .page { grid-template-columns: 1fr; }
       .success-layout, .radar-section { grid-template-columns: 1fr; }
     }
+    @page { size: A4; margin: 10mm; }
     @media print {
-      .panel { display: none; }
-      .page { display: block; padding: 0; }
-      .preview { box-shadow: none; padding: 0; }
-      .report { border: none; }
+      html, body { background: #ffffff !important; }
+      body { padding: 0 !important; margin: 0 !important; }
+      .panel { display: none !important; }
+      .page { display: block !important; padding: 0 !important; max-width: none !important; }
+      .preview { box-shadow: none !important; padding: 0 3mm 0 0 !important; overflow: visible !important; }
+      .report { border: none !important; box-shadow: inset 0 0 0 1.5px #d9f0ec !important; break-inside: avoid; page-break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .report::after { box-shadow: inset 0 0 0 1.5px #d9f0ec !important; }
     }
   </style>
 </head>
