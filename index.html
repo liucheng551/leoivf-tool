@@ -13,9 +13,12 @@
     .panel, .preview { background: #fff; border-radius: 16px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); padding: 18px; }
     h1 { font-size: 28px; margin: 0 0 8px; text-align:center; }
     h2 { font-size: 17px; margin: 18px 0 6px; }
+    .section-title { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
     h3 { font-size: 16px; margin: 0 0 12px; }
     p { line-height: 1.7; }
-    .muted { color: #6b7280; font-size: 13px; line-height: 1.7; }
+    .muted { color: #6b7280; font-size: 12px; line-height: 1.5; }
+    .inline-note { color: #6b7280; font-size: 12px; font-weight: 400; }
+    .score-note { color: #6b7280; font-size: 12px; margin-top: 5px; line-height: 1.5; }
     label { display: block; font-size: 14px; font-weight: 600; margin: 14px 0 6px; }
     input, textarea { width: 100%; border: 1px solid #d1d5db; border-radius: 10px; padding: 10px 12px; font-size: 14px; font-family: inherit; }
     textarea { min-height: 360px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; line-height: 1.45; }
@@ -40,7 +43,7 @@
     .marker { position: absolute; top: -2px; width: 12px; height: 12px; border-radius: 50%; background: #111827; transform: translateX(-50%); }
     .progress-labels { display: flex; justify-content: space-between; font-size: 12px; color: #6b7280; margin-top: 6px; }
     .radar-section { display: grid; grid-template-columns: 270px 1fr; gap: 14px; align-items: center; }
-    .radar-wrap { max-width: 250px; margin: 0 auto; }
+    .radar-wrap { width: 300px; max-width: 300px; margin: 0 auto; }
     .dim-list { padding-left: 18px; line-height: 1.65; margin: 0; }
     .advice-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 8px 12px; margin-bottom: 8px; }
     .tag { float: right; background: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 999px; font-size: 12px; }
@@ -461,9 +464,8 @@ check_box无相关病史`;
       const vals = [scores.reserve, scores.eggEmbryo, scores.sperm, scores.uterus, scores.lifestyle, scores.hormone];
       return `
         <h1>试管综合评估报告</h1>
-        <div class="meta-line">姓名：${data.name}　｜　年龄：${data.ageLabel}　｜　评估日期：${getToday()}${sourceUrl ? `　｜　结果链接：${sourceUrl}` : ''}</div>
-        <p class="muted"><h2>一、整体成功率预测</h2>
-        <p class="section-note">说明：此区间用于辅助决策，不是对个人精确妊娠率的预测。</p>
+        <div class="meta-line">姓名：${data.name}　｜　年龄区间：${data.ageLabel}　｜　评估日期：${getToday()}${sourceUrl ? `　｜　结果链接：${sourceUrl}` : ''}</div>
+        <h2 class="section-title">一、整体成功率预测 <span class="inline-note">该结果根据AMH、FSH、AFC和年龄综合计算得出，仅用于参考和对比</span></h2>
         <div class="success-box">
           <div class="pill">综合档位：${levelLabel(success.successRate)} ｜ 预测成功率：${success.successRate}%</div>
           <div class="success-layout">
@@ -480,17 +482,14 @@ check_box无相关病史`;
             </div>
           </div>
         </div>
-        <p class="muted">说明：此区间用于辅助决策，不是对个人精确妊娠率的预测。</p>
-
-        <h2>二、当前生育力画像</h2>
-        <p class="muted">以下画像用于识别当前最值得优先优化的关键环节。</p>
+        <h2 class="section-title">二、当前生育力画像 <span class="inline-note">用于呈现当前状态和识别最需要改善的因素</span></h2>
         <div class="radar-section">
           <div class="radar-wrap"><canvas id="radarCanvas"></canvas></div>
           <div>
             <ul class="dim-list">
               ${labels.map((label, i) => `<li><strong>${label}</strong>：${score5(vals[i])} 分。</li>`).join('')}
             </ul>
-            <p class="score-note">每个维度最高是5分，最低是1分，得分越低越需要重视和优化。</p>
+            <p class="score-note">每个维度最高5分，最低1分，得分越低越需要改善。</p>
           </div>
         </div>
 
@@ -500,7 +499,7 @@ check_box无相关病史`;
           <ul>${buildTopAdvice(scores, data).map(x => `<li>${x}</li>`).join('')}</ul>
         </div>
 
-        <div class="footer-note"><span>说明：本报告旨在帮你定位问题，不代表任何诊疗意见。</span><span>© 2026 LEOIVF. All rights reserved.</span></div>
+        <div class="footer-note"><span>说明：本报告旨在帮你定位问题，不代表任何诊疗意见。</span><span>© 2026 LEOIVF.COM. All rights reserved.</span></div>
       `;
     }
 
