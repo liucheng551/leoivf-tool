@@ -53,12 +53,42 @@ const fixedSheetHeaders = ['时间戳记','邮箱','你的姓名是？','你目�
 const ageMap = [{key:'≤33',value:31,label:'≤33岁'},{key:'33–36',value:35,label:'33–36岁'},{key:'37–39',value:38,label:'37–39岁'},{key:'40–42',value:41,label:'40–42岁'},{key:'≥43',value:44,label:'≥43岁'}];
 let radarChart = null;
 let validatedData = null;
-function trimText(s){ return String(s == null ? '' : s).trim(); }
-function removeChars(s, chars){ let out=''; const text=trimText(s); for(let i=0;i<text.length;i++){ if(chars.indexOf(text[i])===-1) out += text[i]; } return out; }
-function removeAllSpaces(s){ let out=''; const text=trimText(s); for(let i=0;i<text.length;i++){ const ch=text[i]; if(ch!==' ' && ch!=='
-' && ch!=='
-' && ch!=='	') out += ch; } return out; }
-function normalizeKey(t){ return removeChars(removeAllSpaces(t), '？?：:（）()【】-—–'); }
+
+function trimText(s) {
+  return String(s == null ? '' : s).trim();
+}
+
+function removeChars(s, chars) {
+  let out = '';
+  const text = trimText(s);
+  for (let i = 0; i < text.length; i++) {
+    if (chars.indexOf(text[i]) === -1) {
+      out += text[i];
+    }
+  }
+  return out;
+}
+
+function removeAllSpaces(s) {
+  let out = '';
+  const text = trimText(s);
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    // 去掉空格、换行、回车、制表符
+    if (ch !== ' ' && ch !== '\n' && ch !== '\r' && ch !== '\t') {
+      out += ch;
+    }
+  }
+  return out;
+}
+
+function normalizeKey(t) {
+  // 去掉所有空白，再去掉常见中文符号
+  return removeChars(
+    removeAllSpaces(t),
+    '？?：:（）()【】-—–'
+  );
+}
 function splitByMultiSpaces(line){ const out=[]; let buf=''; let spaceCount=0; const text=String(line||''); for(let i=0;i<text.length;i++){ const ch=text[i]; const isSpace = ch===' ' || ch==='	'; if(isSpace){ spaceCount += 1; if(spaceCount>=2){ if(buf.trim()) out.push(buf.trim()); buf=''; } else { buf += ' '; } } else { if(spaceCount===1){} spaceCount=0; buf += ch; } } if(buf.trim()) out.push(buf.trim()); return out; }
 function splitLines(text){ const rows=[]; let buf=''; const s=String(text||''); for(let i=0;i<s.length;i++){ const ch=s[i]; if(ch==='
 '){ if(buf.trim()) rows.push(buf.trim()); buf=''; } else if(ch!=='
