@@ -336,7 +336,7 @@
       const vals = [scores.reserve, scores.eggEmbryo, scores.sperm, scores.uterus, scores.lifestyle, scores.hormone];
       return `
         <h1>试管综合评估报告</h1>
-        <div class="meta-line">姓名：${data.name}　｜　年龄区间：${data.ageLabel}　｜　评估日期：${getToday()}${sourceUrl ? `　｜　结果链接：${sourceUrl}` : ''}</div>
+        <div class="meta-line">姓名：${data.name}　｜　年龄区间：${data.ageLabel}　｜　评估日期：${getToday()}</div>
         <h2 class="section-title">一、整体成功率预测 <span class="inline-note">该结果根据AMH、FSH、AFC和年龄综合计算得出，仅用于参考和对比</span></h2>
         <div class="success-box">
           <div class="pill">综合档位：${levelLabel(success.successRate)} ｜ 预测成功率：${success.successRate}%</div>
@@ -481,37 +481,26 @@
     });
 
     document.getElementById('clearBtn').addEventListener('click', () => {
-            document.getElementById('rawText').value = '';
-      document.getElementById('report').innerHTML = '<h2>报告预览区</h2><p class="muted">请先在左侧粘贴 Assessment 结果文本，然后点击“生成报告”。</p>';
+      document.getElementById('rawText').value = '';
+      document.getElementById('report').innerHTML = '<h2>报告预览区</h2><p class="muted">请先在左侧粘贴 Google Sheet 1 行用户回答，然后点击“检查数据”。</p>';
+      document.getElementById('parsePreview').style.display = 'none';
+      document.getElementById('emailDisplay').style.display = 'none';
+      validatedData = null;
+      setGenerateEnabled(false);
       if (radarChart) { radarChart.destroy(); radarChart = null; }
     });
 
     document.getElementById('generateBtn').addEventListener('click', () => {
-      const rawText = document.getElementById('rawText').value.trim();
-            if (!rawText) { alert('请先粘贴 Assessment 结果文本。'); return; }
+      if (!validatedData) return alert('请先点击“检查数据”，确认 25 个字段识别正确后再生成报告');
       try {
-        const data = parseAnyInput(rawText);
-        renderParsePreview(data);
-        const success = calcSuccessRate(data);
-        const scores = calcRadar100(data);
-        document.getElementById('report').innerHTML = createReport(data, success, scores, '');
+        renderParsePreview(validatedData);
+        const success = calcSuccessRate(validatedData);
+        const scores = calcRadar100(validatedData);
+        document.getElementById('report').innerHTML = createReport(validatedData, success, scores, '');
         setTimeout(() => renderRadar(scores), 60);
       } catch (e) {
-        console.error(e);
-        alert('生成失败，请检查是否从 Google Sheet 复制了完整的一行回答。');
+        alert(e.message || '生成失败，请检查是否从 Google Sheet 复制了完整的一行回答。');
       }
-    });
-
-    document.getElementById('pdfBtn').addEventListener('click', () => {
-      const report = document.getElementById('report');
-      const opt = {
-        margin: 10,
-        filename: 'LEOIVF-综合生育力评估报告.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(report).save();
     });
   </script>
 </body>
