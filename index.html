@@ -80,11 +80,8 @@
     }
 
     function normalizeKey(t) {
-  return String(t || '')
-    .replace(/\s+/g, '')
-    .replace(/[？?：:（）()【】—–-]/g, '')
-    .trim();
-}
+      return String(t || '').replace(/\s+/g, '').replace(/[？?：:（）()【】\-—–]/g, '').trim();
+    }
 
     const sheetFieldMap = {
       timestamp: ['时间戳记','时间戳','提交时间'],
