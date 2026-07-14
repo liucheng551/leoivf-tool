@@ -70,18 +70,17 @@
     <section class="panel">
       <h1>LEOIVF 报告生成工具</h1>
       <div class="muted">这版报告模板已按你提供的旧版样式重构：整体成功率区间、关键维度雷达、分维度解读与改善建议。</div>
-      <label for="sourceUrl">结果链接（可选，仅记录）</label>
-      <input id="sourceUrl" type="text" placeholder="粘贴 Kajabi Assessment 结果链接" />
-      <label for="rawText">Assessment 结果全文 / Google Sheet 单行数据</label>
-      <textarea id="rawText" placeholder="可粘贴 1）Assessment 结果全文；或 2）从 Google Sheet 复制的一整行数据（含标题行更佳）"></textarea>
-      <div class="muted">新支持两种导入方式：直接粘贴 Assessment 全文，或从 Google Sheet 复制“标题行 + 1条回答”一起粘贴。若只复制回答行，也可按与表头相同顺序导入。</div>
+      <label for="rawText">Google Sheet 单行数据</label>
+      <textarea id="rawText" placeholder="粘贴从 Google Sheet 复制的 1 行用户回答；也兼容复制后变成多空格纯文本的情况"></textarea>
+      <div class="muted">现在仅保留 Google Sheet 导入：建议直接复制 1 行用户回答。可先点“检查数据”，查看全部字段识别结果，并在左侧直接复制邮箱去发报告。</div>
       <div class="btn-row">
+        <button class="secondary" id="previewBtn">检查数据</button>
         <button class="primary" id="generateBtn">生成报告</button>
-        <button class="secondary" id="sheetSampleBtn">表格示例</button>
         <button class="secondary" id="pdfBtn">下载 PDF</button>
-        <button class="secondary" id="sampleBtn">填入示例</button>
         <button class="danger" id="clearBtn">清空</button>
       </div>
+      <div id="emailDisplay" class="parse-preview" style="display:none"></div>
+      <div id="parsePreview" class="parse-preview" style="display:none"></div>
     </section>
     <section class="preview">
       <div id="report" class="report" contenteditable="true">
@@ -92,79 +91,6 @@
   </div>
 
   <script>
-    const sampleText = `Results Breakdown
-你的姓名是？
-Your Answer
-张三
-你目前的年龄是？
-Your Answer
-check_box≤33岁
-你最近一次检测的AMH值是多少？
-Your Answer
-check_box≥2.0 ng/mL
-最近一次基础窦卵泡数（AFC）是多少？
-Your Answer
-check_box≥15个
-你的基础FSH值（月经第2–3天）是多少？
-Your Answer
-check_box<8 IU/L
-若你做过IVF，既往周期的优质胚胎（3BB以上）比例大概是多少？
-Your Answer
-check_box10–29%
-你有过几次不明原因自然流产或胚胎停育？
-Your Answer
-check_box2次
-是否做过PGT（胚胎染色体检测）？
-Your Answer
-check_box建议做但未做
-伴侣最近一次精液常规结果如何？
-Your Answer
-check_box1项轻度偏低
-精子形态正常率是多少？（Kruger严格标准）
-Your Answer
-check_box2–3.9%
-最近一次精子 DNA 碎片率（DFI）结果如何？
-Your Answer
-check_box≤15%
-是否发现子宫结构异常？
-Your Answer
-check_box有息肉/小肌瘤待处理
-是否有子宫腺肌症或高度怀疑？
-Your Answer
-check_box明确没有
-最近B超的内膜厚度情况如何？
-Your Answer
-check_box<6mm
-是否有宫腔粘连史或宫腔镜手术史？
-Your Answer
-check_box没有
-平均每晚睡眠时长及质量如何？
-Your Answer
-check_box6–7小时、偶尔不佳
-你目前的运动习惯是？
-Your Answer
-check_box几乎不运动
-你的饮食习惯整体如何？
-Your Answer
-check_box饮食不规律或偏单一
-你的情绪状态整体如何？
-Your Answer
-check_box经常焦虑或情绪低落
-最近一次甲状腺功能检查（TSH 为主）结果如何？
-Your Answer
-check_box正常且近期复查
-是否有胰岛素抵抗或血糖偏高问题？ 
-Your Answer
-check_box轻度偏高已控制
-是否有血脂异常（高胆固醇/高甘油三酯）？ 
-Your Answer
-check_box轻度偏高，生活方式干预中
-是否有凝血或免疫相关异常史（如APS、易栓症）？ 
-Your Answer
-check_box无相关病史`;
-
-    const sheetSampleText = `时间戳	邮箱	你的姓名是？	你目前的年龄是？	最近一次检测的AMH值是多少？	最近一次基础窦卵泡数（AFC）是多少？	你的基础FSH值（月经第2–3天）是多少？	若你做过IVF，既往周期的优质胚胎（3BB以上）比例大概是多少？	你有过几次不明原因自然流产或胚胎停育？	是否做过PGT（胚胎染色体检测）？	伴侣最近一次精液常规结果如何？	精子形态正常率是多少？（Kruger严格标准）	最近一次精子 DNA 碎片率（DFI）结果如何？	是否发现子宫结构异常？	是否有子宫腺肌症或高度怀疑？	最近B超的内膜厚度情况如何？	是否有宫腔粘连史或宫腔镜手术史？	平均每晚睡眠时长及质量如何？	你目前的运动习惯是？	你的饮食习惯整体如何？	你的情绪状态整体如何？	最近一次甲状腺功能检查（TSH 为主）结果如何？	是否有胰岛素抵抗或血糖偏高问题？	是否有血脂异常（高胆固醇/高甘油三酯）？	是否有凝血或免疫相关异常史（如APS、易栓症）？
-2026-07-14 09:00:00	zhangsan@example.com	张三	38–40岁	1.0–1.9 ng/mL	10–14个	未检测	10–29%	2次	建议做但未做	1项轻度偏低	2–3.9%	≤15%	有息肉/小肌瘤待处理	明确没有	<6mm	没有	6–7小时、偶尔不佳	几乎不运动	饮食不规律或偏单一	经常焦虑或情绪低落	正常且近期复查	轻度偏高已控制	轻度偏高，生活方式干预中	无相关病史`;
 
     const ageMap = [
       { key: '≤33岁', value: 33, band: 'A1', label: '≤33岁' },
@@ -195,48 +121,6 @@ check_box无相关病史`;
       const slice = normalized.slice(idx, idx + 260);
       const match = slice.match(/check_box([^\n]+)/);
       return match ? match[1].trim() : '';
-    }
-
-    function findPlainAnswer(text, question) {
-      const lines = normalizeText(text).split('\n').map(v => v.trim());
-      const idx = lines.findIndex(v => v === question);
-      if (idx === -1) return '';
-      for (let i = idx + 1; i < Math.min(lines.length, idx + 6); i++) {
-        const line = lines[i];
-        if (!line || line === 'Your Answer') continue;
-        if (line.startsWith('check_box')) return line.replace('check_box', '').trim();
-        return line.trim();
-      }
-      return '';
-    }
-
-    function parseText(text) {
-      const parsed = {
-        name: findPlainAnswer(text, '你的姓名是？') || '未填写',
-        ageAnswer: findCheckboxAnswer(text, '你目前的年龄是？'),
-        amhAnswer: findCheckboxAnswer(text, '你最近一次检测的AMH值是多少？'),
-        afcAnswer: findCheckboxAnswer(text, '最近一次基础窦卵泡数（AFC）是多少？'),
-        fshAnswer: findCheckboxAnswer(text, '你的基础FSH值（月经第2–3天）是多少？'),
-        embryoRatio: findCheckboxAnswer(text, '若你做过IVF，既往周期的优质胚胎（3BB以上）比例大概是多少？'),
-        miscarriage: findCheckboxAnswer(text, '你有过几次不明原因自然流产或胚胎停育？'),
-        pgt: findCheckboxAnswer(text, '是否做过PGT（胚胎染色体检测）？'),
-        semen: findCheckboxAnswer(text, '伴侣最近一次精液常规结果如何？'),
-        morphology: findCheckboxAnswer(text, '精子形态正常率是多少？（Kruger严格标准）'),
-        dfi: findCheckboxAnswer(text, '最近一次精子 DNA 碎片率（DFI）结果如何？'),
-        uterusIssue: findCheckboxAnswer(text, '是否发现子宫结构异常？'),
-        adenomyosis: findCheckboxAnswer(text, '是否有子宫腺肌症或高度怀疑？'),
-        endometrium: findCheckboxAnswer(text, '最近B超的内膜厚度情况如何？'),
-        adhesion: findCheckboxAnswer(text, '是否有宫腔粘连史或宫腔镜手术史？'),
-        sleep: findCheckboxAnswer(text, '平均每晚睡眠时长及质量如何？'),
-        exercise: findCheckboxAnswer(text, '你目前的运动习惯是？'),
-        diet: findCheckboxAnswer(text, '你的饮食习惯整体如何？'),
-        mood: findCheckboxAnswer(text, '你的情绪状态整体如何？'),
-        tsh: findCheckboxAnswer(text, '最近一次甲状腺功能检查（TSH 为主）结果如何？'),
-        glucose: findCheckboxAnswer(text, '是否有胰岛素抵抗或血糖偏高问题？'),
-        lipid: findCheckboxAnswer(text, '是否有血脂异常（高胆固醇/高甘油三酯）？'),
-        immune: findCheckboxAnswer(text, '是否有凝血或免疫相关异常史（如APS、易栓症）？')
-      };
-      return toNumericData(parsed);
     }
 
     function reserveBand(amh, afc) {
@@ -447,7 +331,7 @@ check_box无相关病史`;
       return `总评：你的当前生育力画像呈现“有优势、也有短板”的状态，建议优先提升得分最低的1–2个维度，以带动整体成功率上升。`;
     }
 
-    function createReport(data, success, scores, sourceUrl) {
+    function createReport(data, success, scores, '') {
       const labels = ['卵巢储备','卵子/胚胎','精子因素','子宫环境','生活/情绪','激素代谢'];
       const vals = [scores.reserve, scores.eggEmbryo, scores.sperm, scores.uterus, scores.lifestyle, scores.hormone];
       return `
@@ -491,6 +375,64 @@ check_box无相关病史`;
       `;
     }
 
+
+    function parseAnyInput(rawText) {
+      return toNumericData(parseSheetText(rawText));
+    }
+
+    let validatedData = null;
+
+    function setGenerateEnabled(enabled) {
+      document.getElementById('generateBtn').disabled = !enabled;
+    }
+
+    function renderParsePreview(data) {
+      const emailBox = document.getElementById('emailDisplay');
+      emailBox.style.display = 'block';
+      emailBox.className = 'parse-preview email-highlight';
+      emailBox.innerHTML = `
+        <h4>邮箱（可直接复制发报告）</h4>
+        <div class="email-value">${data.email || '未识别'}</div>
+      `;
+
+      const previewFields = [
+        ['时间戳记', data.timestamp],
+        ['邮箱', data.email],
+        ['姓名', data.name],
+        ['年龄', data.ageLabel],
+        ['AMH', data.amh],
+        ['AFC', data.afc],
+        ['FSH', data.fsh],
+        ['优质胚胎率', data.embryoRatio],
+        ['自然流产/停育', data.miscarriage],
+        ['PGT', data.pgt],
+        ['精液常规', data.semen],
+        ['精子形态', data.morphology],
+        ['DFI', data.dfi],
+        ['子宫结构异常', data.uterusIssue],
+        ['腺肌症', data.adenomyosis],
+        ['内膜厚度', data.endometrium],
+        ['宫腔粘连史', data.adhesion],
+        ['睡眠', data.sleep],
+        ['运动', data.exercise],
+        ['饮食', data.diet],
+        ['情绪', data.mood],
+        ['TSH', data.tsh],
+        ['血糖/胰岛素', data.glucose],
+        ['血脂', data.lipid],
+        ['凝血/免疫', data.immune]
+      ];
+
+      const box = document.getElementById('parsePreview');
+      box.style.display = 'block';
+      box.innerHTML = `
+        <h4>25字段识别预览</h4>
+        <div class="parse-grid full">
+          ${previewFields.map(([label, value]) => `<div class="parse-item"><b>${label}</b>${(value ?? '') === '' ? '<span style="color:#b42318">未识别</span>' : value}</div>`).join('')}
+        </div>
+      `;
+    }
+
     function renderRadar(scores) {
       const canvas = document.getElementById('radarCanvas');
       if (!canvas || typeof Chart === 'undefined') return;
@@ -519,34 +461,44 @@ check_box无相关病史`;
       });
     }
 
-    document.getElementById('sampleBtn').addEventListener('click', () => {
-      document.getElementById('rawText').value = sampleText;
-    });
+    setGenerateEnabled(false);
 
-    document.getElementById('sheetSampleBtn').addEventListener('click', () => {
-      document.getElementById('rawText').value = sheetSampleText;
+    document.getElementById('previewBtn').addEventListener('click', () => {
+      const rawText = document.getElementById('rawText').value.trim();
+      if (!rawText) return alert('请先粘贴 1 行用户回答');
+      try {
+        const data = parseAnyInput(rawText);
+        validatedData = data;
+        renderParsePreview(data);
+        setGenerateEnabled(true);
+      } catch (e) {
+        validatedData = null;
+        setGenerateEnabled(false);
+        document.getElementById('emailDisplay').style.display = 'none';
+        document.getElementById('parsePreview').style.display = 'none';
+        alert(e.message || '识别失败');
+      }
     });
 
     document.getElementById('clearBtn').addEventListener('click', () => {
-      document.getElementById('sourceUrl').value = '';
-      document.getElementById('rawText').value = '';
+            document.getElementById('rawText').value = '';
       document.getElementById('report').innerHTML = '<h2>报告预览区</h2><p class="muted">请先在左侧粘贴 Assessment 结果文本，然后点击“生成报告”。</p>';
       if (radarChart) { radarChart.destroy(); radarChart = null; }
     });
 
     document.getElementById('generateBtn').addEventListener('click', () => {
       const rawText = document.getElementById('rawText').value.trim();
-      const sourceUrl = document.getElementById('sourceUrl').value.trim();
-      if (!rawText) { alert('请先粘贴 Assessment 结果文本。'); return; }
+            if (!rawText) { alert('请先粘贴 Assessment 结果文本。'); return; }
       try {
-        const data = looksLikeSheetData(rawText) ? toNumericData(parseSheetText(rawText)) : parseText(rawText);
+        const data = parseAnyInput(rawText);
+        renderParsePreview(data);
         const success = calcSuccessRate(data);
         const scores = calcRadar100(data);
-        document.getElementById('report').innerHTML = createReport(data, success, scores, sourceUrl);
+        document.getElementById('report').innerHTML = createReport(data, success, scores, '');
         setTimeout(() => renderRadar(scores), 60);
       } catch (e) {
         console.error(e);
-        alert('生成失败，请检查文本格式是否接近 Assessment 结果页复制内容。');
+        alert('生成失败，请检查是否从 Google Sheet 复制了完整的一行回答。');
       }
     });
 
