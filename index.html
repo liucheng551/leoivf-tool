@@ -10,7 +10,7 @@
     * { box-sizing: border-box; }
     body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f3f6f8; color: #1f2937; }
     .page { max-width: 1320px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 430px 1fr; gap: 20px; }
-    .panel, .preview { background: #f4fbfa; border-radius: 16px; box-shadow: none; padding: 12px 20px 12px 12px; box-sizing: border-box; overflow: visible; }
+    .panel, .preview { background: #fff; border-radius: 16px; box-shadow: none; padding: 8px 14px 8px 8px; box-sizing: border-box; }
     h1 { font-size: 28px; margin: 0 0 8px; text-align:center; }
     h2 { font-size: 17px; margin: 18px 0 6px; }
     .section-title { display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
@@ -28,7 +28,7 @@
     .secondary { background: #e5e7eb; color: #111827; }
     .danger { background: #b91c1c; color: #fff; }
     .report { position: relative; background: #fff; border: none; border-radius: 16px; padding: 18px 26px 22px 24px; min-height: 760px; box-sizing: border-box; overflow: visible; }
-    .report::after { content: ""; position: absolute; inset: 0; border-radius: 16px; outline: 1.2px solid #b2dbd7; pointer-events: none; }
+    .report::after { content: ""; position: absolute; inset: 0; border-radius: 16px; pointer-events: none; background: no-repeat center/100% 100% url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Crect x='0.75' y='0.75' width='98.5' height='98.5' rx='3' ry='3' fill='none' stroke='%23d9f0ec' stroke-width='1.1'/%3E%3C/svg%3E"); }
     .meta-line { color: #6b7280; font-size: 14px; margin-bottom: 8px; text-align:center; }
     .success-box { background: #eaf7f7; border: 1px solid #b9dddd; border-radius: 12px; padding: 10px 12px; }
     .pill { display: inline-block; background: #0f766e; color: #fff; padding: 5px 10px; border-radius: 999px; font-size: 12px; margin-bottom: 10px; }
@@ -59,9 +59,9 @@
       body { padding: 0 !important; margin: 0 !important; }
       .panel { display: none !important; }
       .page { display: block !important; padding: 0 !important; max-width: none !important; }
-      .preview { box-shadow: none !important; padding: 0 4mm 0 0 !important; overflow: visible !important; width: 100% !important; box-sizing: border-box !important; }
-      .report { border: none !important; box-shadow: none !important; break-inside: avoid; page-break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .report::after { outline: 1.2px solid #b2dbd7 !important; box-shadow: none !important; }
+      .preview { box-shadow: none !important; padding: 0 3mm 0 0 !important; overflow: visible !important; }
+      .report { border: none !important; break-inside: avoid; page-break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .report::after { content: ""; position: absolute; inset: 0; border-radius: 16px; pointer-events: none; background: no-repeat center/100% 100% url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Crect x='0.75' y='0.75' width='98.5' height='98.5' rx='3' ry='3' fill='none' stroke='%23d9f0ec' stroke-width='1.1'/%3E%3C/svg%3E") !important; }
     }
   </style>
 </head>
@@ -72,10 +72,12 @@
       <div class="muted">这版报告模板已按你提供的旧版样式重构：整体成功率区间、关键维度雷达、分维度解读与改善建议。</div>
       <label for="sourceUrl">结果链接（可选，仅记录）</label>
       <input id="sourceUrl" type="text" placeholder="粘贴 Kajabi Assessment 结果链接" />
-      <label for="rawText">Assessment 结果全文</label>
-      <textarea id="rawText" placeholder="把 Assessment 结果页复制出来的全文粘贴到这里"></textarea>
+      <label for="rawText">Assessment 结果全文 / Google Sheet 单行数据</label>
+      <textarea id="rawText" placeholder="可粘贴 1）Assessment 结果全文；或 2）从 Google Sheet 复制的一整行数据（含标题行更佳）"></textarea>
+      <div class="muted">新支持两种导入方式：直接粘贴 Assessment 全文，或从 Google Sheet 复制“标题行 + 1条回答”一起粘贴。若只复制回答行，也可按与表头相同顺序导入。</div>
       <div class="btn-row">
         <button class="primary" id="generateBtn">生成报告</button>
+        <button class="secondary" id="sheetSampleBtn">表格示例</button>
         <button class="secondary" id="pdfBtn">下载 PDF</button>
         <button class="secondary" id="sampleBtn">填入示例</button>
         <button class="danger" id="clearBtn">清空</button>
@@ -161,6 +163,9 @@ check_box轻度偏高，生活方式干预中
 Your Answer
 check_box无相关病史`;
 
+    const sheetSampleText = `时间戳	邮箱	你的姓名是？	你目前的年龄是？	最近一次检测的AMH值是多少？	最近一次基础窦卵泡数（AFC）是多少？	你的基础FSH值（月经第2–3天）是多少？	若你做过IVF，既往周期的优质胚胎（3BB以上）比例大概是多少？	你有过几次不明原因自然流产或胚胎停育？	是否做过PGT（胚胎染色体检测）？	伴侣最近一次精液常规结果如何？	精子形态正常率是多少？（Kruger严格标准）	最近一次精子 DNA 碎片率（DFI）结果如何？	是否发现子宫结构异常？	是否有子宫腺肌症或高度怀疑？	最近B超的内膜厚度情况如何？	是否有宫腔粘连史或宫腔镜手术史？	平均每晚睡眠时长及质量如何？	你目前的运动习惯是？	你的饮食习惯整体如何？	你的情绪状态整体如何？	最近一次甲状腺功能检查（TSH 为主）结果如何？	是否有胰岛素抵抗或血糖偏高问题？	是否有血脂异常（高胆固醇/高甘油三酯）？	是否有凝血或免疫相关异常史（如APS、易栓症）？
+2026-07-14 09:00:00	zhangsan@example.com	张三	38–40岁	1.0–1.9 ng/mL	10–14个	未检测	10–29%	2次	建议做但未做	1项轻度偏低	2–3.9%	≤15%	有息肉/小肌瘤待处理	明确没有	<6mm	没有	6–7小时、偶尔不佳	几乎不运动	饮食不规律或偏单一	经常焦虑或情绪低落	正常且近期复查	轻度偏高已控制	轻度偏高，生活方式干预中	无相关病史`;
+
     const ageMap = [
       { key: '≤33岁', value: 33, band: 'A1', label: '≤33岁' },
       { key: '34岁', value: 34, band: 'A2', label: '34岁' },
@@ -206,35 +211,12 @@ check_box无相关病史`;
     }
 
     function parseText(text) {
-      const name = findPlainAnswer(text, '你的姓名是？') || '未填写';
-      const ageAnswer = findCheckboxAnswer(text, '你目前的年龄是？');
-      const ageInfo = ageMap.find(item => ageAnswer.includes(item.key)) || { value: 38, band: 'A4', label: '38–40岁' };
-      const amhAnswer = findCheckboxAnswer(text, '你最近一次检测的AMH值是多少？');
-      let amh = 1.0;
-      if (amhAnswer.includes('≥2.0')) amh = 2.1;
-      else if (amhAnswer.includes('1.5')) amh = 1.7;
-      else if (amhAnswer.includes('1.0')) amh = 1.2;
-      else if (amhAnswer.includes('0.7')) amh = 0.8;
-      else if (amhAnswer.includes('<0.7')) amh = 0.6;
-      const afcAnswer = findCheckboxAnswer(text, '最近一次基础窦卵泡数（AFC）是多少？');
-      let afc = 5;
-      if (afcAnswer.includes('≥15')) afc = 16;
-      else if (afcAnswer.includes('10–14') || afcAnswer.includes('10-14')) afc = 12;
-      else if (afcAnswer.includes('5–9') || afcAnswer.includes('5-9')) afc = 7;
-      else if (afcAnswer.includes('3–4') || afcAnswer.includes('3-4')) afc = 3;
-      else if (afcAnswer.includes('≤3') || afcAnswer.includes('<3')) afc = 2;
-      const fshAnswer = findCheckboxAnswer(text, '你的基础FSH值（月经第2–3天）是多少？');
-      let fsh = 9;
-      if (fshAnswer.includes('<8')) fsh = 7;
-      else if (fshAnswer.includes('8–9.9') || fshAnswer.includes('8-9.9')) fsh = 9;
-      else if (fshAnswer.includes('10–11.9') || fshAnswer.includes('10-11.9')) fsh = 11;
-      else if (fshAnswer.includes('≥12')) fsh = 12.5;
-      return {
-        name,
-        age: ageInfo.value,
-        ageBand: ageInfo.band,
-        ageLabel: ageInfo.label,
-        amh, afc, fsh,
+      const parsed = {
+        name: findPlainAnswer(text, '你的姓名是？') || '未填写',
+        ageAnswer: findCheckboxAnswer(text, '你目前的年龄是？'),
+        amhAnswer: findCheckboxAnswer(text, '你最近一次检测的AMH值是多少？'),
+        afcAnswer: findCheckboxAnswer(text, '最近一次基础窦卵泡数（AFC）是多少？'),
+        fshAnswer: findCheckboxAnswer(text, '你的基础FSH值（月经第2–3天）是多少？'),
         embryoRatio: findCheckboxAnswer(text, '若你做过IVF，既往周期的优质胚胎（3BB以上）比例大概是多少？'),
         miscarriage: findCheckboxAnswer(text, '你有过几次不明原因自然流产或胚胎停育？'),
         pgt: findCheckboxAnswer(text, '是否做过PGT（胚胎染色体检测）？'),
@@ -254,6 +236,7 @@ check_box无相关病史`;
         lipid: findCheckboxAnswer(text, '是否有血脂异常（高胆固醇/高甘油三酯）？'),
         immune: findCheckboxAnswer(text, '是否有凝血或免疫相关异常史（如APS、易栓症）？')
       };
+      return toNumericData(parsed);
     }
 
     function reserveBand(amh, afc) {
@@ -540,6 +523,10 @@ check_box无相关病史`;
       document.getElementById('rawText').value = sampleText;
     });
 
+    document.getElementById('sheetSampleBtn').addEventListener('click', () => {
+      document.getElementById('rawText').value = sheetSampleText;
+    });
+
     document.getElementById('clearBtn').addEventListener('click', () => {
       document.getElementById('sourceUrl').value = '';
       document.getElementById('rawText').value = '';
@@ -552,7 +539,7 @@ check_box无相关病史`;
       const sourceUrl = document.getElementById('sourceUrl').value.trim();
       if (!rawText) { alert('请先粘贴 Assessment 结果文本。'); return; }
       try {
-        const data = parseText(rawText);
+        const data = looksLikeSheetData(rawText) ? toNumericData(parseSheetText(rawText)) : parseText(rawText);
         const success = calcSuccessRate(data);
         const scores = calcRadar100(data);
         document.getElementById('report').innerHTML = createReport(data, success, scores, sourceUrl);
