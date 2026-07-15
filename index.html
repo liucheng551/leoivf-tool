@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEOIVF Sheet 报告生成工具 v2</title>
+  <title>LEOIVF 试管综合评估报告工具</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -12,55 +12,48 @@
   <style>
     *{box-sizing:border-box}
     body{margin:0;font-family:'Noto Sans SC',sans-serif;background:#f3f6f8;color:#1f2937}
-    .page{max-width:1320px;margin:0 auto;padding:20px;display:grid;grid-template-columns:430px 1fr;gap:20px}
-    .panel,.preview{background:#f4fbfa;border-radius:16px;padding:12px 20px 12px 12px}
-    h1{font-size:28px;margin:0 0 8px;text-align:center;font-weight:800}
-    h2{font-size:17px;margin:18px 0 6px}
-    h3{font-size:16px;margin:0 0 12px}
-    p{line-height:1.7}
-    .muted{color:#6b7280;font-size:12px;line-height:1.5}
-    .inline-note{color:#6b7280;font-size:12px;font-weight:400}
-    .score-note{color:#6b7280;font-size:12px;margin-top:5px;line-height:1.5}
-    label{display:block;font-size:14px;font-weight:600;margin:14px 0 6px}
+    .page{max-width:1520px;margin:0 auto;padding:18px;display:grid;grid-template-columns:320px 300px 1fr;gap:16px;align-items:start}
+    .panel,.preview,.report-panel{background:#f4fbfa;border-radius:16px;padding:12px}
+    .panel-inner,.preview-inner{background:rgba(255,255,255,.35);border-radius:14px;padding:10px}
+    h1{font-size:22px;margin:0 0 8px;text-align:center;font-weight:800}
+    h2{font-size:16px;margin:0 0 10px;font-weight:800}.muted{color:#6b7280;font-size:12px;line-height:1.55}
+    label{display:block;font-size:14px;font-weight:700;margin:14px 0 6px}
     input,textarea{width:100%;border:1px solid #d1d5db;border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;background:#fff}
-    textarea{min-height:280px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.45}
-    .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-    button{border:none;border-radius:999px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer}
+    textarea{min-height:360px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;line-height:1.45}
+    .btn-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px} button{border:none;border-radius:999px;padding:10px 14px;font-size:14px;font-weight:700;cursor:pointer}
     .primary{background:#0f766e;color:#fff}.secondary{background:#e5e7eb;color:#111827}.danger{background:#b91c1c;color:#fff}
-    .report{position:relative;background:#fff;border:none;border-radius:16px;padding:18px 26px 22px 24px;min-height:760px;overflow:visible}
-    .report:after{content:'';position:absolute;inset:0;border-radius:16px;outline:1.2px solid #b2dbd7;pointer-events:none}
-    .meta-line{color:#6b7280;font-size:14px;margin-bottom:8px;text-align:center}
-    .success-box{background:#eaf7f7;border:1px solid #b9dddd;border-radius:12px;padding:10px 12px}
-    .pill{display:inline-block;background:#0f766e;color:#fff;padding:5px 10px;border-radius:999px;font-size:12px;margin-bottom:10px}
-    .success-layout{display:grid;grid-template-columns:1fr 380px;gap:18px;align-items:center}
-    .progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;display:flex}.seg-1{background:#f97316;width:20%}.seg-2{background:#f59e0b;width:20%}.seg-3{background:#22c55e;width:20%}.seg-4{background:#cbd5e1;width:20%}.seg-5{background:#e5e7eb;width:20%}
-    .marker-track{position:relative;height:12px;margin-top:8px}.marker{position:absolute;top:-2px;width:12px;height:12px;border-radius:50%;background:#111827;transform:translateX(-50%)}
-    .progress-labels{display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-top:6px}
-    .radar-section{display:flex;justify-content:center;align-items:center;gap:40px;margin-top:8px}.radar-wrap{width:260px;max-width:260px;margin:0 auto}.dim-list{padding-left:18px;line-height:1.6;margin:0}
-    .advice-card{background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:8px 12px;margin-bottom:8px}.tag{float:right;background:#fef3c7;color:#92400e;padding:4px 10px;border-radius:999px;font-size:12px}
-    .footer-note{margin-top:14px;padding-top:10px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:11px;line-height:1.5;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:12px;margin-top:12px}
     .mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.mini-item{border:1px solid #e5e7eb;border-radius:12px;padding:8px 10px;background:#fafafa}.mini-item strong{display:block;font-size:12px;color:#6b7280;margin-bottom:2px}
     .status-pill{display:inline-block;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700}.status-ok{background:#dcfce7;color:#166534}.status-error{background:#fee2e2;color:#b91c1c}.status-warn{background:#fef3c7;color:#92400e}
-    .validation-list{padding-left:18px;line-height:1.6}.field-grid{display:grid;grid-template-columns:1fr;gap:8px}.field-row{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center;padding:8px 10px;background:#fafafa;border-radius:10px;border:1px solid #edf0f2}.field-row code{font-size:12px;color:#6b7280;word-break:break-word}
+    .validation-list,.mapping-list{padding-left:18px;line-height:1.6;margin:10px 0 0}.field-grid{display:grid;grid-template-columns:1fr;gap:8px}.field-row{display:grid;grid-template-columns:98px 1fr;gap:8px;align-items:center;padding:8px 10px;background:#fafafa;border-radius:10px;border:1px solid #edf0f2}.field-row code{font-size:12px;color:#6b7280;word-break:break-word}
     .helper{font-size:12px;color:#6b7280;margin-top:6px}.norm-badge{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;background:#ecfeff;color:#0f766e;font-size:12px;font-weight:700}
-    @media (max-width:980px){.page{grid-template-columns:1fr}.success-layout,.radar-section{display:grid;grid-template-columns:1fr}.report{min-height:auto}}
+    .preview-box{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:10px;min-height:920px}.preview-box pre{margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;white-space:pre-wrap;word-break:break-word;line-height:1.6;color:#374151}
+    .report{position:relative;background:#fff;border-radius:16px;padding:24px 28px 22px;min-height:920px}.report:after{content:'';position:absolute;inset:0;border-radius:16px;outline:1.2px solid #b2dbd7;pointer-events:none}
+    .title{font-size:24px;font-weight:800;text-align:center;margin:0 0 8px}.meta-line{text-align:center;color:#6b7280;font-size:14px;margin-bottom:18px}
+    .section-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:18px 0 10px}.section-head h3{margin:0;font-size:18px;font-weight:800}.section-head span{color:#6b7280;font-size:13px}
+    .success-box{background:#eaf7f7;border:1px solid #b9dddd;border-radius:16px;padding:14px 16px}.pill{display:inline-block;background:#0f766e;color:#fff;padding:6px 12px;border-radius:999px;font-size:13px;font-weight:700;margin-bottom:14px}
+    .success-layout{display:grid;grid-template-columns:1.05fr 1fr;gap:18px;align-items:center}.lead-copy{font-size:17px;line-height:1.8;font-weight:800;margin:0 0 10px}.normal-copy{font-size:15px;line-height:1.9;margin:0}
+    .progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;display:flex}.seg-1{background:#f97316;width:20%}.seg-2{background:#f59e0b;width:20%}.seg-3{background:#22c55e;width:20%}.seg-4{background:#cbd5e1;width:20%}.seg-5{background:#e5e7eb;width:20%}.marker-track{position:relative;height:16px;margin-top:8px}.marker{position:absolute;top:0;width:13px;height:13px;border-radius:50%;background:#111827;transform:translateX(-50%)}
+    .progress-labels{display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-top:8px;padding:0 2px}.progress-words{display:flex;justify-content:space-between;font-size:12px;color:#6b7280;margin-top:6px}
+    .radar-wrap-section{display:grid;grid-template-columns:340px 1fr;gap:26px;align-items:center;padding:4px 4px 0}.radar-wrap{width:230px;margin:0 auto}.score-list{margin:0;padding-left:20px}.score-list li{font-size:18px;line-height:1.7;font-weight:700}.score-desc{font-size:13px;color:#6b7280;margin-top:8px}
+    .advice-box{background:#fbfbfb;border:1px solid #e5e7eb;border-radius:16px;padding:18px 18px 14px}.advice-title{font-size:17px;font-weight:800;margin:0 0 12px}.advice-box ul{margin:0;padding-left:22px}.advice-box li{font-size:15px;line-height:1.9;margin-bottom:4px}
+    .footer-note{margin-top:18px;padding-top:10px;border-top:1px solid #e5e7eb;color:#6b7280;font-size:11px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    @media (max-width:1280px){.page{grid-template-columns:300px 260px 1fr}} @media (max-width:1080px){.page{grid-template-columns:1fr}.preview-box,.report{min-height:auto}.success-layout,.radar-wrap-section{grid-template-columns:1fr}}
+    @media print{body{background:#fff}.panel,.preview{display:none !important}.page{display:block;max-width:none;padding:0}.report-panel{background:#fff;padding:0}.report{box-shadow:none;min-height:auto}}
   </style>
 </head>
 <body>
-  <div class="page">
-    <section class="panel">
-      <h1>LEOIVF 报告生成工具</h1>
-      <p class="muted">支持像 Perplexity 输入框一样，在粘贴 Google Sheet 数据后自动整理成“一行一个值”，这样后续识别、校验和出报告会更稳定。</p>
-
+<div class="page">
+  <section class="panel">
+    <div class="panel-inner">
+      <h1>数据输入区</h1>
+      <p class="muted">支持直接粘贴 Google Sheet 内容。粘贴后会自动整理成一行一个字段，便于检测和生成报告。</p>
       <label for="sourceUrl">结果链接（可选，仅记录）</label>
       <input id="sourceUrl" type="text" placeholder="粘贴 Google Sheet / 表单来源链接" />
-
       <label for="rawText">Sheet 竖排数据</label>
-      <textarea id="rawText" placeholder="直接粘贴 Google Sheet 复制的数据，工具会自动整理为一行一个字段"></textarea>
-      <div class="helper">粘贴后系统会自动把混排文本整理成逐行数据，无需手动换行。</div>
+      <textarea id="rawText" placeholder="直接粘贴 Google Sheet 数据"></textarea>
+      <div class="helper">无需手动换行，工具会自动整理。</div>
       <div id="normalizeBadge" class="norm-badge" style="display:none;">已自动整理粘贴内容</div>
-
       <div class="btn-row">
         <button class="primary" id="generateBtn">生成报告</button>
         <button class="secondary" id="validateBtn">检查完整性</button>
@@ -68,9 +61,8 @@
         <button class="secondary" id="sampleBtn">填入示例</button>
         <button class="danger" id="clearBtn">清空</button>
       </div>
-
       <div class="card">
-        <h3>导入状态</h3>
+        <h2>导入状态</h2>
         <div class="mini-grid">
           <div class="mini-item"><strong>识别模式</strong><span id="modeText">待识别</span></div>
           <div class="mini-item"><strong>数据行数</strong><span id="lineCount">0</span></div>
@@ -78,313 +70,73 @@
           <div class="mini-item"><strong>当前状态</strong><span id="statusText">未检查</span></div>
         </div>
       </div>
-
       <div class="card">
-        <h3>完整性验证</h3>
+        <h2>完整性验证</h2>
         <div id="validationSummary" class="status-pill status-warn">尚未检查</div>
         <ul id="validationList" class="validation-list"><li>点击“检查完整性”或“生成报告”后显示结果。</li></ul>
       </div>
+    </div>
+  </section>
 
+  <section class="preview">
+    <div class="preview-inner">
+      <h1>预览区</h1>
+      <p class="muted">中栏用于确认自动整理后的数据和字段映射，方便快速发现错位。</p>
+      <div class="preview-box"><pre id="normalizedPreview">等待粘贴数据…</pre></div>
       <div class="card">
-        <h3>字段映射</h3>
+        <h2>字段映射</h2>
         <div id="fieldGrid" class="field-grid"></div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="preview">
-      <div id="report" class="report">
-        <h2>报告预览区</h2>
-        <p class="muted">请先在左侧粘贴 Assessment 结果文本，然后点击“生成报告”。</p>
-      </div>
-    </section>
-  </div>
+  <section class="report-panel">
+    <div id="report" class="report">
+      <div class="title">试管综合评估报告</div>
+      <div class="meta-line">姓名：— ｜ 年龄区间：— ｜ 评估日期：—</div>
+      <div class="section-head"><h3>一、整体成功率预测</h3><span>该结果根据AMH、FSH、AFC和年龄综合计算得出，仅用于参考和对比</span></div>
+      <div class="success-box"><div class="pill">综合档位：— ｜ 预测成功率：—</div><p class="normal-copy">等待生成报告。</p></div>
+      <div class="section-head"><h3>二、当前生育力画像</h3><span>用于呈现当前状态和识别最需要改善的因素</span></div>
+      <div class="section-head"><h3>三、个性化改善建议</h3></div>
+      <div class="advice-box"><p class="normal-copy">等待生成报告。</p></div>
+    </div>
+  </section>
+</div>
 
-  <script>
-    const FIELD_ORDER = [
-      { key: 'timestamp', label: '提交时间', required: false },
-      { key: 'email', label: '邮箱', required: false },
-      { key: 'name', label: '姓名', required: true },
-      { key: 'age', label: '年龄', required: true },
-      { key: 'amh', label: 'AMH', required: true },
-      { key: 'afc', label: 'AFC', required: true },
-      { key: 'fsh', label: 'FSH', required: true },
-      { key: 'embryoRatio', label: '优质囊胚率', required: true },
-      { key: 'miscarriage', label: '流产次数', required: true },
-      { key: 'pgt', label: 'PGT', required: true },
-      { key: 'semen', label: '精液常规', required: true },
-      { key: 'morphology', label: 'Kruger 形态', required: true },
-      { key: 'dfi', label: 'DNA DFI', required: true },
-      { key: 'uterusIssue', label: '子宫结构因素', required: true },
-      { key: 'adenomyosis', label: '宫腔粘连/炎症', required: true },
-      { key: 'endometrium', label: '内膜厚度', required: true },
-      { key: 'adhesion', label: '积水/粘连', required: true },
-      { key: 'sleep', label: '睡眠', required: true },
-      { key: 'exercise', label: '运动', required: true },
-      { key: 'diet', label: '饮食', required: true },
-      { key: 'mood', label: '情绪压力', required: true },
-      { key: 'tsh', label: 'TSH/甲状腺', required: true },
-      { key: 'glucose', label: '血糖/胰岛素', required: true },
-      { key: 'lipid', label: '血脂/代谢', required: true },
-      { key: 'immune', label: 'APS/免疫', required: true }
-    ];
-
-    const SAMPLE_VALUES = [
-      '2026-7-14 上午09:55:54',
-      'liucheng551@outlook.com',
-      'Liu cheng',
-      '40–42岁',
-      '0.5–0.9 ng/mL',
-      '5–9个',
-      '>15 IU/L',
-      '>50%',
-      '1次',
-      '做过，正常率偏低',
-      '各项均在正常范围',
-      '≥4%',
-      '≤15%',
-      '有较大肌瘤/腺肌症',
-      '明确没有',
-      '<6mm',
-      '没有',
-      '5–6小时或经常浅眠',
-      '偶尔运动',
-      '均衡规律，少加工食品',
-      '经常焦虑或情绪低落',
-      '正常且近期复查',
-      '无相关问题',
-      '明显异常',
-      '未检测'
-    ];
-
-    const TOKEN_PATTERNS = [
-      /\d{4}-\d{1,2}-\d{1,2}\s*(?:上午|下午)?\s*\d{1,2}:\d{2}:\d{2}/iy,
-      /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/iy,
-      /[A-Za-z]+\s+[A-Za-z]+/y,
-      /40\s*[–-]\s*42岁/y,
-      /38\s*[–-]\s*40岁/y,
-      /35\s*[–-]\s*37岁/y,
-      /34岁/y,
-      /0\.5\s*[–-]\s*0\.9\s*ng\/?mL/iy,
-      /0\.7\s*[–-]\s*0\.9\s*ng\/?mL/iy,
-      /1\.0\s*[–-]\s*1\.4\s*ng\/?mL/iy,
-      /1\.5\s*[–-]\s*1\.9\s*ng\/?mL/iy,
-      /5\s*[–-]\s*9\s*个/y,
-      /10\s*[–-]\s*14\s*个/y,
-      /3\s*[–-]\s*4\s*个/y,
-      />\s*15\s*IU\/?L/iy,
-      /12\s*[–-]\s*15\s*IU\/?L/iy,
-      /10\s*[–-]\s*11\.9\s*IU\/?L/iy,
-      /8\s*[–-]\s*9\.9\s*IU\/?L/iy,
-      />\s*50%/y,
-      /30\s*[–-]\s*49%/y,
-      /10\s*[–-]\s*29%/y,
-      /1次/y,
-      /2次/y,
-      /3次及以上/y,
-      /做过[，,]?\s*正常率偏低/y,
-      /做过[，,]?\s*正常率正常/y,
-      /未做过/y,
-      /各项均在正常范围/y,
-      /轻度异常/y,
-      /明显异常/y,
-      /≥\s*4%/y,
-      /2\s*[–-]\s*3\.9%/y,
-      /<\s*2%/y,
-      /≤\s*15%/y,
-      /15\s*[–-]\s*30%/y,
-      />\s*30%/y,
-      /有较大肌瘤\/?腺肌症/y,
-      /轻度异常待观察/y,
-      /明确没有/y,
-      /<\s*6mm/iy,
-      /6\s*[–-]\s*7mm/iy,
-      />\s*7mm/iy,
-      /没有/y,
-      /有/y,
-      /5\s*[–-]\s*6小时或经常浅眠/y,
-      /6\s*[–-]\s*7小时/y,
-      /7小时以上且稳定/y,
-      /偶尔运动/y,
-      /规律运动/y,
-      /几乎不运动/y,
-      /均衡规律[，,]?\s*少加工食品/y,
-      /饮食一般[，,]?\s*偶尔外食/y,
-      /高糖高油[，,]?\s*加工食品多/y,
-      /经常焦虑或情绪低落/y,
-      /偶尔波动/y,
-      /总体稳定/y,
-      /正常且近期复查/y,
-      /异常未复查/y,
-      /无相关问题/y,
-      /明显异常/y,
-      /未检测/y
-    ];
-
-    let radarChart = null;
-
-    function normalizeText(text) {
-      return (text || '').replace(/\r/g, '').replace(/[—-]/g, '–').replace(/\u00a0/g, ' ').trim();
-    }
-
-    function escapeHtml(str) {
-      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
-    }
-
-    function autoNormalizePastedText(raw) {
-      const text = normalizeText(raw).replace(/\t/g, ' ').replace(/\s+/g, ' ').trim();
-      if (!text) return { text: '', values: [], changed: false, mode: '空文本' };
-      const originalLines = normalizeText(raw).split('\n').map(v => v.trim()).filter(Boolean);
-      if (originalLines.length >= 20) return { text: originalLines.join('\n'), values: originalLines, changed: false, mode: '已是逐行数据' };
-
-      let cursor = 0;
-      const values = [];
-      while (cursor < text.length) {
-        while (text[cursor] === ' ') cursor++;
-        if (cursor >= text.length) break;
-        let matched = null;
-        for (const pattern of TOKEN_PATTERNS) {
-          pattern.lastIndex = cursor;
-          const m = pattern.exec(text);
-          if (m && m.index === cursor) {
-            matched = m[0].replace(/\s+/g, ' ').trim();
-            break;
-          }
-        }
-        if (matched) {
-          values.push(matched);
-          cursor += matched.length;
-        } else {
-          let next = text.indexOf(' ', cursor);
-          if (next === -1) next = text.length;
-          values.push(text.slice(cursor, next).trim());
-          cursor = next + 1;
-        }
-      }
-
-      const changed = values.length > originalLines.length;
-      return { text: values.join('\n'), values, changed, mode: changed ? '自动拆分粘贴内容' : '逐行映射' };
-    }
-
-    function parseInput(raw) {
-      const normalized = autoNormalizePastedText(raw);
-      const data = {};
-      FIELD_ORDER.forEach((field, index) => data[field.key] = normalized.values[index] || '');
-      return { ...normalized, data, lineCount: normalized.values.length };
-    }
-
-    function validateData(data) {
-      const required = FIELD_ORDER.filter(f => f.required);
-      const missing = required.filter(f => !String(data[f.key] || '').trim());
-      const messages = [];
-      if (!missing.length) messages.push('关键字段完整，可以生成报告。');
-      else messages.push(`当前仍缺少 ${missing.length} 个关键字段。`);
-      ['name','age','amh','afc','fsh','endometrium'].forEach(key => {
-        if (!data[key]) messages.push(`缺少${FIELD_ORDER.find(f=>f.key===key).label}。`);
-      });
-      return { ok: missing.length === 0, present: required.length - missing.length, total: required.length, missing, messages };
-    }
-
-    function renderMapping(data) {
-      document.getElementById('fieldGrid').innerHTML = FIELD_ORDER.map(field => `<div class="field-row"><strong>${field.label}</strong><code>${data[field.key] ? escapeHtml(data[field.key]) : '<span style="color:#9ca3af">未提供</span>'}</code></div>`).join('');
-    }
-
-    function updateValidation(parsed, validation) {
-      document.getElementById('modeText').textContent = parsed.mode;
-      document.getElementById('lineCount').textContent = `${parsed.lineCount} 行`;
-      document.getElementById('requiredCount').textContent = `${validation.present} / ${validation.total}`;
-      document.getElementById('statusText').textContent = validation.ok ? '可生成' : '字段不完整';
-      const badge = document.getElementById('normalizeBadge');
-      badge.style.display = parsed.changed ? 'inline-block' : 'none';
-      const summary = document.getElementById('validationSummary');
-      summary.className = `status-pill ${validation.ok ? 'status-ok' : 'status-error'}`;
-      summary.textContent = validation.ok ? '字段完整，可生成报告' : `缺少 ${validation.missing.length} 项字段`;
-      document.getElementById('validationList').innerHTML = validation.messages.map(x => `<li>${escapeHtml(x)}</li>`).join('') + (validation.missing.length ? validation.missing.map(x => `<li>未填写：${escapeHtml(x.label)}</li>`).join('') : '');
-      renderMapping(parsed.data);
-    }
-
-    function ageToBand(ageText){const t=ageText||'';if(/33|≤33/.test(t))return{value:33,band:'A1',label:'≤33岁'};if(/34/.test(t)&&!/40|41|42/.test(t))return{value:34,band:'A2',label:'34岁'};if(/35|36|37/.test(t)&&!/40|41|42/.test(t))return{value:36,band:'A3',label:'35–37岁'};if(/38|39|40/.test(t)&&!/41|42/.test(t))return{value:39,band:'A4',label:'38–40岁'};if(/41|42|43|44/.test(t))return{value:42,band:'A5',label:'41岁以上'};return{value:39,band:'A4',label:'38–40岁'}}
-    function parseAMH(v){const t=v||'';if(/2\.0|>2|≥2/.test(t))return 2.1;if(/1\.5/.test(t))return 1.7;if(/1\.0/.test(t))return 1.2;if(/0\.7|0\.5/.test(t))return 0.8;if(/<0\.7|0\.1|0\.2|0\.3|0\.4|0\.6/.test(t))return 0.6;return 1.0}
-    function parseAFC(v){const t=v||'';if(/15|16|17|18|19|20/.test(t))return 16;if(/10–14|10-14/.test(t))return 12;if(/5–9|5-9/.test(t))return 7;if(/3–4|3-4/.test(t))return 3;return 2}
-    function parseFSH(v){const t=v||'';if(/<8|≤8|正常/.test(t))return 7;if(/8–9\.9|8-9\.9/.test(t))return 9;if(/10–11\.9|10-11\.9/.test(t))return 11;if(/12–15|12-15/.test(t))return 12.5;if(/>15|≥15/.test(t))return 16;return 9}
-    function reserveBand(amh,afc){if(amh>=2.0&&afc>=15)return{band:'O1',label:'优秀'};if(amh>=1.5&&afc>=10)return{band:'O2',label:'较好'};if(amh>=1.0&&afc>=5)return{band:'O3',label:'中等'};if(amh>=0.7&&afc>=3)return{band:'O4',label:'偏低'};return{band:'O5',label:'较低'}}
-    const successMatrix={O1:{A1:60,A2:55,A3:45,A4:35,A5:25},O2:{A1:55,A2:50,A3:40,A4:30,A5:20},O3:{A1:50,A2:45,A3:35,A4:25,A5:15},O4:{A1:45,A2:40,A3:30,A4:20,A5:10},O5:{A1:40,A2:35,A3:25,A4:15,A5:10}};
-    function score5(v){if(v>=85)return 5;if(v>=70)return 4;if(v>=55)return 3;if(v>=40)return 2;return 1}
-    function calcScores(d){let reserve=70;if(d.amh>=2&&d.afc>=15)reserve=75;else if(d.amh>=1.5&&d.afc>=10)reserve=68;else if(d.amh>=1&&d.afc>=5)reserve=58;else if(d.amh>=0.7)reserve=45;else reserve=30;if(d.fsh>=10)reserve-=5;if(d.fsh>15)reserve-=8;let egg=68;if(/50/.test(d.embryoRatio))egg=82;else if(/30|10/.test(d.embryoRatio))egg=68;else egg=55;if(/偏低|异常/.test(d.pgt))egg-=8;else if(/做过/.test(d.pgt))egg-=4;if(/1次/.test(d.miscarriage))egg-=4;if(/2次|3次|反复/.test(d.miscarriage))egg-=10;let sperm=74;if(/异常|偏低|少弱畸/.test(d.semen))sperm-=10;if(/≥4|正常/.test(d.morphology))sperm+=2;else if(/2|3/.test(d.morphology))sperm-=8;if(/≤15|正常/.test(d.dfi))sperm+=5;else if(/>15|偏高/.test(d.dfi))sperm-=10;let uterus=55;if(/肌瘤|腺肌症|息肉|积水/.test(d.uterusIssue))uterus-=14;if(/<6mm|薄/.test(d.endometrium))uterus-=15;if(/明确没有|没有/.test(d.adenomyosis))uterus+=6;if(/有|存在/.test(d.adhesion)&&!/没有/.test(d.adhesion))uterus-=8;if(/没有/.test(d.adhesion))uterus+=4;let life=52;if(/5–6|5-6|浅眠|失眠/.test(d.sleep))life-=8;if(/偶尔/.test(d.exercise))life-=6;if(/没有运动|久坐|几乎不运动/.test(d.exercise))life-=14;if(/均衡规律/.test(d.diet))life+=8;if(/经常焦虑|低落|压力大/.test(d.mood))life-=12;let hormone=84;if(!/正常/.test(d.tsh))hormone-=8;if(/无相关问题|正常/.test(d.glucose))hormone+=2;else if(/异常|高|胰岛素/.test(d.glucose))hormone-=10;if(/明显异常/.test(d.lipid))hormone-=10;else if(/异常/.test(d.lipid))hormone-=8;if(/未检测/.test(d.immune))hormone-=4;if(/异常|阳性/.test(d.immune))hormone-=12;const n=v=>Math.max(20,Math.min(95,Math.round(v)));return{reserve:n(reserve),eggEmbryo:n(egg),sperm:n(sperm),uterus:n(uterus),lifestyle:n(life),hormone:n(hormone)}}
-    function levelLabel(rate){if(rate<=10)return'难度较高';if(rate<=25)return'仍有机会';if(rate<=45)return'中等区间';if(rate<=55)return'相对乐观';return'较佳区间'}
-    function levelText(rate){if(rate<=10)return'当前主要矛盾较集中，建议先优化关键限制因素再进入周期。';if(rate<=25)return'存在一定机会，但成功率更依赖系统性优化与策略选择。';if(rate<=45)return'基础条件处于中段，若针对短板改善，结果仍有提升空间。';if(rate<=55)return'整体条件相对平衡，后续重点在精细化提升。';return'当前基础较好，建议保持优势并稳住执行质量。'}
-    function markerLeft(rate){const map={10:10,15:18,20:26,25:34,30:42,35:50,40:58,45:66,50:74,55:82,60:90};return map[rate]||50}
-    function getToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-    function dimExplain(title,score){const s=score5(score);if(title==='卵巢储备')return s>=4?'AMH、AFC 与 FSH 组合相对稳定，提示储备端仍有可用空间。':s===3?'卵巢储备处于中间带，可能需要更重视促排策略与周期节奏。':'卵巢储备偏弱，是当前成功率的重要限制点。';if(title==='卵子与胚胎')return s>=4?'胚胎形成质量相对可接受，是后续优化中的一个支撑项。':s===3?'胚胎端表现一般，仍需结合年龄和流产史综合判断。':'胚胎质量线索偏弱，建议重点关注染色体与实验室策略。';if(title==='精子因素')return s>=4?'精液常规、形态与 DFI 整体较稳，对受精端拖累较小。':s===3?'精子端中等，必要时可进一步做精细化评估。':'精子相关因素可能对受精和胚胎质量形成明显影响。';if(title==='子宫环境')return s>=4?'宫腔与着床环境相对平衡，可继续维持。':s===3?'子宫环境存在轻中度限制，移植前建议再确认。':'子宫环境是明显短板，需优先处理结构性或内膜问题。';if(title==='生活方式')return s>=4?'生活方式基础不错，具备继续巩固的价值。':s===3?'作息与运动仍有改进空间，调整后可能带来加分。':'睡眠、运动或情绪压力对整体状态的影响较明显。';return s>=4?'代谢和内分泌线索相对稳定。':s===3?'建议继续追踪甲状腺、代谢或免疫相关指标。':'代谢/内分泌/免疫端存在潜在风险，建议补充复查。'}
-    function dimSuggestions(title,score,data){const s=score5(score);if(title==='卵巢储备')return s>=4?['继续维持当前监测频率。','促排前复核 AMH、AFC 与基础激素。']:['和医生讨论更匹配的促排方案。','把周期目标从“数量”调整为“可用胚胎效率”。'];if(title==='卵子与胚胎')return s>=4?['保持实验室与取卵策略稳定。']:['结合年龄评估是否需要更积极累积胚胎。','有流产或 PGT 异常线索时，优先完善胚胎端评估。'];if(title==='精子因素')return s>=4?['维持当前男性端管理。']:['补做或复查精子碎片率与形态。','必要时在周期前进行男方生活方式强化管理。'];if(title==='子宫环境')return s>=4?['移植前按常规复核即可。']:['先处理肌瘤、腺肌症、积水或内膜偏薄问题。','移植前确认宫腔条件是否已优化到位。'];if(title==='生活方式')return s>=4?['保持睡眠、运动与情绪管理节奏。']:['把睡眠先提升到 7 小时以上。','每周建立规律运动，并配合减压干预。'];return s>=4?['按阶段复查甲状腺与代谢指标。']:['补齐免疫/APS 未检测项目。','处理血脂、血糖或甲状腺异常后再评估周期节奏。']}
-    function overallAdviceSummary(scores){const items=[['卵巢储备',score5(scores.reserve)],['卵子与胚胎',score5(scores.eggEmbryo)],['精子因素',score5(scores.sperm)],['子宫环境',score5(scores.uterus)],['生活方式',score5(scores.lifestyle)],['内分泌代谢',score5(scores.hormone)]].sort((a,b)=>a[1]-b[1]);const weakest=items.filter(x=>x[1]<=2).map(x=>x[0]);if(weakest.length>=2)return `当前最需要优先处理的是 ${weakest[0]} 与 ${weakest[1]}。`;if(weakest.length===1)return `当前最优先需要改善的是 ${weakest[0]}。`;return'整体没有单一决定性短板，建议按优先级做精细化优化。'}
-    function buildTopAdvice(scores,data){const s=[];if(score5(scores.uterus)<=2)s.push('移植前先处理子宫结构和内膜问题，避免在条件未达标时仓促进入周期。');if(score5(scores.lifestyle)<=2)s.push('把睡眠、规律运动和情绪减压作为 6–8 周基础干预重点。');if(score5(scores.eggEmbryo)<=3||score5(scores.sperm)<=3)s.push('同步优化胚胎质量与男性端指标，必要时补充更细化检查。');if(score5(scores.hormone)<=3)s.push('先把甲状腺、血脂、血糖和免疫未检测项补齐，再决定下一步节奏。');if(score5(scores.reserve)<=2||data.age>=40)s.push('设定更现实的周期目标，以可用胚胎和节奏管理为核心，而非单看取卵数。');if(!s.length)s.push('保持当前优势项，并围绕最弱一项做小步快跑式优化。');return Array.from(new Set(s)).slice(0,3)}
-    function createAdviceBlock(title,score,data,tagText){return `<div class="advice-card"><div class="tag">${tagText}</div><h3>${title}：${score5(score)}分</h3><p>${dimExplain(title,score)}</p><ul>${dimSuggestions(title,score,data).map(x=>`<li>${x}</li>`).join('')}</ul></div>`}
-    function createReport(data,success,scores,sourceUrl){const labels=['卵巢储备','卵子与胚胎','精子因素','子宫环境','生活方式','内分泌代谢'];const vals=[scores.reserve,scores.eggEmbryo,scores.sperm,scores.uterus,scores.lifestyle,scores.hormone];return `<h1>LEOIVF 评估报告</h1><div class="meta-line">${escapeHtml(data.name)} ｜ ${escapeHtml(data.ageLabel)} ｜ 生成日期 ${getToday()} ${sourceUrl?`｜ 来源：${escapeHtml(sourceUrl)}`:''}</div><h2>总体成功率区间 <span class="inline-note">基于年龄、AMH、FSH、AFC 分层</span></h2><div class="success-box"><div class="pill">${levelLabel(success.successRate)} ｜ ${success.successRate}%</div><div class="success-layout"><div><p><strong>预计单周期 IVF 成功率约为 ${success.successRate}% ，${levelText(success.successRate)}</strong></p><p>卵巢储备分层：${success.reserveLabel}（${success.reserveBand}）；年龄分层：${data.ageLabel}。</p></div><div class="progress-box"><div class="progress"><div class="seg-1"></div><div class="seg-2"></div><div class="seg-3"></div><div class="seg-4"></div><div class="seg-5"></div></div><div class="marker-track"><div class="marker" style="left:${markerLeft(success.successRate)}%"></div></div><div class="progress-labels"><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span></div></div></div></div><h2>六维评估图 <span class="inline-note">1分最低，5分最佳</span></h2><div class="radar-section"><div class="radar-wrap"><canvas id="radarCanvas"></canvas></div><div><ul class="dim-list">${labels.map((label,i)=>`<li><strong>${label}</strong>：${score5(vals[i])}分</li>`).join('')}</ul><p class="score-note">评分反映相对优先级，不替代正式医学诊疗结论。</p></div></div><h2>重点建议</h2><div class="advice-card"><p><strong>${overallAdviceSummary(scores)}</strong></p><ul>${buildTopAdvice(scores,data).map(x=>`<li>${x}</li>`).join('')}</ul></div>${createAdviceBlock('卵巢储备',scores.reserve,data,'基础')}${createAdviceBlock('卵子与胚胎',scores.eggEmbryo,data,'胚胎')}${createAdviceBlock('精子因素',scores.sperm,data,'男方')}${createAdviceBlock('子宫环境',scores.uterus,data,'着床')}${createAdviceBlock('生活方式',scores.lifestyle,data,'日常')}${createAdviceBlock('内分泌代谢',scores.hormone,data,'代谢')}<div class="footer-note"><span>此报告用于初步分层与沟通，不替代医生面诊。</span><span>© 2026 LEOIVF.COM. All rights reserved.</span></div>`}
-    function renderRadar(scores){const canvas=document.getElementById('radarCanvas');if(!canvas||typeof Chart==='undefined')return;const ctx=canvas.getContext('2d');if(radarChart)radarChart.destroy();radarChart=new Chart(ctx,{type:'radar',data:{labels:['卵巢储备','卵子与胚胎','精子因素','子宫环境','生活方式','内分泌代谢'],datasets:[{label:'维度评分',data:[score5(scores.reserve),score5(scores.eggEmbryo),score5(scores.sperm),score5(scores.uterus),score5(scores.lifestyle),score5(scores.hormone)],fill:true,backgroundColor:'rgba(34,197,94,0.18)',borderColor:'rgba(34,197,94,1)',pointBackgroundColor:'rgba(34,197,94,1)',pointBorderColor:'#fff',borderWidth:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:5,ticks:{stepSize:1,backdropColor:'transparent',color:'#6b7280'},pointLabels:{font:{size:12},color:'#374151'},grid:{color:'#d1d5db'},angleLines:{color:'#d1d5db'}}}}})}
-
-    function getParsed() {
-      const raw = document.getElementById('rawText').value.trim();
-      if (!raw) { alert('请先粘贴 Google Sheet 数据。'); return null; }
-      const parsed = parseInput(raw);
-      if (parsed.changed) document.getElementById('rawText').value = parsed.text;
-      const validation = validateData(parsed.data);
-      updateValidation(parsed, validation);
-      return { parsed, validation };
-    }
-
-    document.getElementById('rawText').addEventListener('paste', (e) => {
-      e.preventDefault();
-      const pasted = (e.clipboardData || window.clipboardData).getData('text');
-      const normalized = autoNormalizePastedText(pasted);
-      const textarea = document.getElementById('rawText');
-      textarea.value = normalized.text;
-      document.getElementById('normalizeBadge').style.display = normalized.changed ? 'inline-block' : 'none';
-    });
-
-    document.getElementById('validateBtn').addEventListener('click', () => { getParsed(); });
-
-    document.getElementById('generateBtn').addEventListener('click', () => {
-      const result = getParsed();
-      if (!result) return;
-      if (!result.validation.ok) { alert('当前数据不完整，请先补齐缺失字段。'); return; }
-      const d = result.parsed.data;
-      const ageInfo = ageToBand(d.age);
-      const data = { ...d, age: ageInfo.value, ageBand: ageInfo.band, ageLabel: ageInfo.label, amh: parseAMH(d.amh), afc: parseAFC(d.afc), fsh: parseFSH(d.fsh) };
-      const reserve = reserveBand(data.amh, data.afc);
-      const success = { reserveBand: reserve.band, reserveLabel: reserve.label, successRate: successMatrix[reserve.band][data.ageBand] };
-      const scores = calcScores(data);
-      const sourceUrl = document.getElementById('sourceUrl').value.trim();
-      document.getElementById('report').innerHTML = createReport(data, success, scores, sourceUrl);
-      setTimeout(() => renderRadar(scores), 60);
-    });
-
-    document.getElementById('sampleBtn').addEventListener('click', () => {
-      document.getElementById('rawText').value = SAMPLE_VALUES.join('\n');
-      document.getElementById('sourceUrl').value = 'https://docs.google.com/spreadsheets/';
-      document.getElementById('normalizeBadge').style.display = 'none';
-    });
-
-    document.getElementById('clearBtn').addEventListener('click', () => {
-      document.getElementById('sourceUrl').value = '';
-      document.getElementById('rawText').value = '';
-      document.getElementById('normalizeBadge').style.display = 'none';
-      document.getElementById('modeText').textContent = '待识别';
-      document.getElementById('lineCount').textContent = '0';
-      document.getElementById('requiredCount').textContent = '0 / 0';
-      document.getElementById('statusText').textContent = '未检查';
-      document.getElementById('validationSummary').className = 'status-pill status-warn';
-      document.getElementById('validationSummary').textContent = '尚未检查';
-      document.getElementById('validationList').innerHTML = '<li>点击“检查完整性”或“生成报告”后显示结果。</li>';
-      document.getElementById('fieldGrid').innerHTML = '';
-      document.getElementById('report').innerHTML = '<h2>报告预览区</h2><p class="muted">请先在左侧粘贴 Assessment 结果文本，然后点击“生成报告”。</p>';
-      if (radarChart) { radarChart.destroy(); radarChart = null; }
-    });
-
-    document.getElementById('pdfBtn').addEventListener('click', () => {
-      const report = document.getElementById('report');
-      const opt = { margin: 10, filename: `LEOIVF-Report-${Date.now()}.pdf`, image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' } };
-      html2pdf().set(opt).from(report).save();
-    });
-  </script>
+<script>
+const FIELD_ORDER=[{key:'timestamp',label:'提交时间',required:false},{key:'email',label:'邮箱',required:false},{key:'name',label:'姓名',required:true},{key:'age',label:'年龄',required:true},{key:'amh',label:'AMH',required:true},{key:'afc',label:'AFC',required:true},{key:'fsh',label:'FSH',required:true},{key:'embryoRatio',label:'优质囊胚率',required:true},{key:'miscarriage',label:'流产次数',required:true},{key:'pgt',label:'PGT',required:true},{key:'semen',label:'精液常规',required:true},{key:'morphology',label:'Kruger 形态',required:true},{key:'dfi',label:'DNA DFI',required:true},{key:'uterusIssue',label:'子宫结构因素',required:true},{key:'adenomyosis',label:'宫腔粘连/炎症',required:true},{key:'endometrium',label:'内膜厚度',required:true},{key:'adhesion',label:'积水/粘连',required:true},{key:'sleep',label:'睡眠',required:true},{key:'exercise',label:'运动',required:true},{key:'diet',label:'饮食',required:true},{key:'mood',label:'情绪压力',required:true},{key:'tsh',label:'TSH/甲状腺',required:true},{key:'glucose',label:'血糖/胰岛素',required:true},{key:'lipid',label:'血脂/代谢',required:true},{key:'immune',label:'APS/免疫',required:true}];
+const SAMPLE_VALUES=['2026-7-14 上午09:55:54','liucheng551@outlook.com','Liu cheng','40–42岁','0.5–0.9 ng/mL','5–9个','>15 IU/L','>50%','1次','做过，正常率偏低','各项均在正常范围','≥4%','≤15%','有较大肌瘤/腺肌症','明确没有','<6mm','没有','5–6小时或经常浅眠','偶尔运动','均衡规律，少加工食品','经常焦虑或情绪低落','正常且近期复查','无相关问题','明显异常','未检测'];
+const TOKEN_PATTERNS=[/\d{4}-\d{1,2}-\d{1,2}\s*(?:上午|下午)?\s*\d{1,2}:\d{2}:\d{2}/iy,/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/iy,/[A-Za-z]+\s+[A-Za-z]+/y,/40\s*[–-]\s*42岁/y,/38\s*[–-]\s*40岁/y,/35\s*[–-]\s*37岁/y,/34岁/y,/≤33岁/y,/0\.5\s*[–-]\s*0\.9\s*ng\/?mL/iy,/0\.7\s*[–-]\s*0\.9\s*ng\/?mL/iy,/1\.0\s*[–-]\s*1\.4\s*ng\/?mL/iy,/1\.5\s*[–-]\s*1\.9\s*ng\/?mL/iy,/5\s*[–-]\s*9\s*个/y,/10\s*[–-]\s*14\s*个/y,/3\s*[–-]\s*4\s*个/y,/>\s*15\s*IU\/?L/iy,/12\s*[–-]\s*15\s*IU\/?L/iy,/10\s*[–-]\s*11\.9\s*IU\/?L/iy,/8\s*[–-]\s*9\.9\s*IU\/?L/iy,/>\s*50%/y,/30\s*[–-]\s*49%/y,/10\s*[–-]\s*29%/y,/1次/y,/2次/y,/3次及以上/y,/做过[，,]?\s*正常率偏低/y,/做过[，,]?\s*正常率正常/y,/未做过/y,/各项均在正常范围/y,/轻度异常/y,/明显异常/y,/≥\s*4%/y,/2\s*[–-]\s*3\.9%/y,/<\s*2%/y,/≤\s*15%/y,/15\s*[–-]\s*30%/y,/>\s*30%/y,/有较大肌瘤\/?腺肌症/y,/轻度异常待观察/y,/明确没有/y,/<\s*6mm/iy,/6\s*[–-]\s*7mm/iy,/>\s*7mm/iy,/没有/y,/有/y,/5\s*[–-]\s*6小时或经常浅眠/y,/6\s*[–-]\s*7小时/y,/7小时以上且稳定/y,/偶尔运动/y,/规律运动/y,/几乎不运动/y,/均衡规律[，,]?\s*少加工食品/y,/饮食一般[，,]?\s*偶尔外食/y,/高糖高油[，,]?\s*加工食品多/y,/经常焦虑或情绪低落/y,/偶尔波动/y,/总体稳定/y,/正常且近期复查/y,/异常未复查/y,/无相关问题/y,/明显异常/y,/未检测/y];
+let radarChart=null;
+function normalizeText(t){return (t||'').replace(/\r/g,'').replace(/[—-]/g,'–').replace(/\u00a0/g,' ').trim()}
+function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
+function autoNormalizePastedText(raw){const text=normalizeText(raw).replace(/\t/g,' ').replace(/\s+/g,' ').trim();if(!text)return{text:'',values:[],changed:false,mode:'空文本'};const originalLines=normalizeText(raw).split('\n').map(v=>v.trim()).filter(Boolean);if(originalLines.length>=20)return{text:originalLines.join('\n'),values:originalLines,changed:false,mode:'已是逐行数据'};let cursor=0;const values=[];while(cursor<text.length){while(text[cursor]===' ')cursor++;if(cursor>=text.length)break;let matched=null;for(const pattern of TOKEN_PATTERNS){pattern.lastIndex=cursor;const m=pattern.exec(text);if(m&&m.index===cursor){matched=m[0].replace(/\s+/g,' ').trim();break}}if(matched){values.push(matched);cursor+=matched.length}else{let next=text.indexOf(' ',cursor);if(next===-1)next=text.length;values.push(text.slice(cursor,next).trim());cursor=next+1}}const changed=values.length>originalLines.length;return{text:values.join('\n'),values,changed,mode:changed?'自动拆分粘贴内容':'逐行映射'}}
+function parseInput(raw){const normalized=autoNormalizePastedText(raw);const data={};FIELD_ORDER.forEach((field,index)=>data[field.key]=normalized.values[index]||'');return{...normalized,data,lineCount:normalized.values.length}}
+function validateData(data){const required=FIELD_ORDER.filter(f=>f.required);const missing=required.filter(f=>!String(data[f.key]||'').trim());const messages=[];if(!missing.length)messages.push('关键字段完整，可以生成报告。');else messages.push(`当前仍缺少 ${missing.length} 个关键字段。`);['name','age','amh','afc','fsh','endometrium'].forEach(key=>{if(!data[key])messages.push(`缺少${FIELD_ORDER.find(f=>f.key===key).label}。`)}) ;return{ok:missing.length===0,present:required.length-missing.length,total:required.length,missing,messages}}
+function renderMapping(data){document.getElementById('fieldGrid').innerHTML=FIELD_ORDER.map(field=>`<div class="field-row"><strong>${field.label}</strong><code>${data[field.key]?escapeHtml(data[field.key]):'<span style="color:#9ca3af">未提供</span>'}</code></div>`).join('')}
+function updatePanels(parsed,validation){document.getElementById('modeText').textContent=parsed.mode;document.getElementById('lineCount').textContent=`${parsed.lineCount} 行`;document.getElementById('requiredCount').textContent=`${validation.present} / ${validation.total}`;document.getElementById('statusText').textContent=validation.ok?'可生成':'字段不完整';document.getElementById('normalizedPreview').textContent=parsed.text||'等待粘贴数据…';const badge=document.getElementById('normalizeBadge');badge.style.display=parsed.changed?'inline-block':'none';const summary=document.getElementById('validationSummary');summary.className=`status-pill ${validation.ok?'status-ok':'status-error'}`;summary.textContent=validation.ok?'字段完整，可生成报告':`缺少 ${validation.missing.length} 项字段`;document.getElementById('validationList').innerHTML=validation.messages.map(x=>`<li>${escapeHtml(x)}</li>`).join('')+(validation.missing.length?validation.missing.map(x=>`<li>未填写：${escapeHtml(x.label)}</li>`).join(''):'');renderMapping(parsed.data)}
+function ageToBand(ageText){const t=ageText||'';if(/≤33|33岁/.test(t))return{value:33,band:'A1',label:'≤33岁'};if(/34/.test(t)&&!/40|41|42/.test(t))return{value:34,band:'A2',label:'34岁'};if(/35|36|37/.test(t)&&!/40|41|42/.test(t))return{value:36,band:'A3',label:'35–37岁'};if(/38|39|40/.test(t)&&!/41|42/.test(t))return{value:39,band:'A4',label:'38–40岁'};if(/41|42|43|44/.test(t))return{value:42,band:'A5',label:'41岁以上'};return{value:39,band:'A4',label:'38–40岁'}}
+function parseAMH(v){const t=v||'';if(/2\.0|>2|≥2/.test(t))return 2.1;if(/1\.5/.test(t))return 1.7;if(/1\.0/.test(t))return 1.2;if(/0\.7|0\.5/.test(t))return 0.8;if(/<0\.7|0\.1|0\.2|0\.3|0\.4|0\.6/.test(t))return 0.6;return 1.0}
+function parseAFC(v){const t=v||'';if(/15|16|17|18|19|20/.test(t))return 16;if(/10–14|10-14/.test(t))return 12;if(/5–9|5-9/.test(t))return 7;if(/3–4|3-4/.test(t))return 3;return 2}
+function parseFSH(v){const t=v||'';if(/<8|≤8|正常/.test(t))return 7;if(/8–9\.9|8-9\.9/.test(t))return 9;if(/10–11\.9|10-11\.9/.test(t))return 11;if(/12–15|12-15/.test(t))return 12.5;if(/>15|≥15/.test(t))return 16;return 9}
+function reserveBand(amh,afc){if(amh>=2.0&&afc>=15)return{band:'O1',label:'较高'};if(amh>=1.5&&afc>=10)return{band:'O2',label:'偏高'};if(amh>=1.0&&afc>=5)return{band:'O3',label:'中等'};if(amh>=0.7&&afc>=3)return{band:'O4',label:'偏低'};return{band:'O5',label:'较低'}}
+const successMatrix={O1:{A1:60,A2:55,A3:45,A4:35,A5:25},O2:{A1:55,A2:50,A3:40,A4:30,A5:20},O3:{A1:50,A2:45,A3:35,A4:25,A5:15},O4:{A1:45,A2:40,A3:30,A4:20,A5:10},O5:{A1:40,A2:35,A3:25,A4:15,A5:10}};
+function markerLeft(rate){const map={10:5,15:15,20:27,25:38,30:49,35:60,40:70,45:80,50:89,55:95,60:99};return map[rate]||60}
+function score5(v){if(v>=85)return 5;if(v>=70)return 4;if(v>=55)return 3;if(v>=40)return 2;return 1}
+function calcScores(d){let reserve=70;if(d.amh>=2&&d.afc>=15)reserve=75;else if(d.amh>=1.5&&d.afc>=10)reserve=68;else if(d.amh>=1&&d.afc>=5)reserve=58;else if(d.amh>=0.7)reserve=45;else reserve=30;if(d.fsh>=10)reserve-=5;if(d.fsh>15)reserve-=8;let egg=68;if(/50/.test(d.embryoRatio))egg=82;else if(/30|10/.test(d.embryoRatio))egg=68;else egg=55;if(/偏低|异常/.test(d.pgt))egg-=8;else if(/做过/.test(d.pgt))egg-=4;if(/1次/.test(d.miscarriage))egg-=4;if(/2次|3次|反复/.test(d.miscarriage))egg-=10;let sperm=74;if(/异常|偏低|少弱畸/.test(d.semen))sperm-=10;if(/≥4|正常/.test(d.morphology))sperm+=2;else if(/2|3/.test(d.morphology))sperm-=8;if(/≤15|正常/.test(d.dfi))sperm+=5;else if(/>15|偏高/.test(d.dfi))sperm-=10;let uterus=55;if(/肌瘤|腺肌症|息肉|积水/.test(d.uterusIssue))uterus-=14;if(/<6mm|薄/.test(d.endometrium))uterus-=15;if(/明确没有|没有/.test(d.adenomyosis))uterus+=6;if(/有|存在/.test(d.adhesion)&&!/没有/.test(d.adhesion))uterus-=8;if(/没有/.test(d.adhesion))uterus+=4;let life=52;if(/5–6|5-6|浅眠|失眠/.test(d.sleep))life-=8;if(/偶尔/.test(d.exercise))life-=6;if(/没有运动|久坐|几乎不运动/.test(d.exercise))life-=14;if(/均衡规律/.test(d.diet))life+=8;if(/经常焦虑|低落|压力大/.test(d.mood))life-=12;let hormone=84;if(!/正常/.test(d.tsh))hormone-=8;if(/无相关问题|正常/.test(d.glucose))hormone+=2;else if(/异常|高|胰岛素/.test(d.glucose))hormone-=10;if(/明显异常/.test(d.lipid))hormone-=10;else if(/异常/.test(d.lipid))hormone-=8;if(/未检测/.test(d.immune))hormone-=4;if(/异常|阳性/.test(d.immune))hormone-=12;const n=v=>Math.max(20,Math.min(95,Math.round(v)));return{reserve:n(reserve),eggEmbryo:n(egg),sperm:n(sperm),uterus:n(uterus),lifestyle:n(life),hormone:n(hormone)}}
+function successGrade(rate){if(rate>=55)return'较高';if(rate>=40)return'偏高';if(rate>=30)return'中等';if(rate>=20)return'偏低';return'较高'}
+function getToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function topAdvice(scores){const items=[['卵巢储备',score5(scores.reserve)],['卵子/胚胎',score5(scores.eggEmbryo)],['精子因素',score5(scores.sperm)],['子宫环境',score5(scores.uterus)],['生活/情绪',score5(scores.lifestyle)],['激素代谢',score5(scores.hormone)]].sort((a,b)=>a[1]-b[1]);return items.slice(0,2).map(x=>x[0])}
+function personalizedAdvice(scores,data){const weak=topAdvice(scores);const first=weak[0],second=weak[1];let intro=`当前优先改善${first}${second?`和${second}`:''}。`;const bullets=[];if(score5(scores.uterus)<=2)bullets.push('优先处理子宫环境问题：如内膜偏薄、息肉、肌瘤或其他宫腔异常，建议先完成相关评估与处理，再进入下一步移植或促排准备。');if(score5(scores.lifestyle)<=2)bullets.push('同步优化生活与情绪状态：先把睡眠、运动、饮食和压力管理稳定下来，为后续治疗提供更好的基础条件。');if(score5(scores.reserve)<=2)bullets.push('针对卵巢储备偏弱的情况，建议与医生讨论更适合的促排策略，并尽量把目标放在提高可用胚胎效率上。');if(score5(scores.eggEmbryo)<=3)bullets.push('如果胚胎端表现一般，可结合年龄、流产史和PGT情况，进一步优化取卵与胚胎培养策略。');if(score5(scores.hormone)<=3)bullets.push('对甲状腺、糖脂代谢或免疫指标存在异常或未检测者，建议先补充检查并稳定后再推进周期。');return{intro,bullets:Array.from(new Set(bullets)).slice(0,2)}}
+function createReport(data,success,scores,sourceUrl){const advice=personalizedAdvice(scores,data);return `<div class="title">试管综合评估报告</div><div class="meta-line">姓名：${escapeHtml(data.name)} ｜ 年龄区间：${escapeHtml(data.ageLabel)} ｜ 评估日期：${getToday()}</div><div class="section-head"><h3>一、整体成功率预测</h3><span>该结果根据AMH、FSH、AFC和年龄综合计算得出，仅用于参考和对比</span></div><div class="success-box"><div class="pill">综合档位：${successGrade(success.successRate)} ｜ 预测成功率：${success.successRate}%</div><div class="success-layout"><div><p class="lead-copy">当前下一次 IVF 整体成功率预测约为 ${success.successRate}%，目前处于“${successGrade(success.successRate)}”等级。</p><p class="normal-copy">通过针对性指导、改善和调整后，成功率仍有上升空间。</p></div><div><div class="progress"><div class="seg-1"></div><div class="seg-2"></div><div class="seg-3"></div><div class="seg-4"></div><div class="seg-5"></div></div><div class="marker-track"><div class="marker" style="left:${markerLeft(success.successRate)}%"></div></div><div class="progress-words"><span>极低</span><span>偏低</span><span>中等</span><span>偏高</span><span>较高</span></div></div></div></div><div class="section-head"><h3>二、当前生育力画像</h3><span>用于呈现当前状态和识别最需要改善的因素</span></div><div class="radar-wrap-section"><div class="radar-wrap"><canvas id="radarCanvas"></canvas></div><div><ul class="score-list"><li>卵巢储备：${score5(scores.reserve)} 分。</li><li>卵子/胚胎：${score5(scores.eggEmbryo)} 分。</li><li>精子因素：${score5(scores.sperm)} 分。</li><li>子宫环境：${score5(scores.uterus)} 分。</li><li>生活/情绪：${score5(scores.lifestyle)} 分。</li><li>激素代谢：${score5(scores.hormone)} 分。</li></ul><div class="score-desc">每个维度最高5分，最低1分，得分越低越需要改善。</div></div></div><div class="section-head"><h3>三、个性化改善建议</h3></div><div class="advice-box"><p class="advice-title">${advice.intro}</p><ul>${advice.bullets.map(x=>`<li>${x}</li>`).join('')}</ul></div><div class="footer-note"><span>说明：本报告旨在帮助定位问题，不代表任何诊疗意见。</span><span>© 2026 LEOIVF.COM. All rights reserved.</span></div>`}
+function renderRadar(scores){const canvas=document.getElementById('radarCanvas');if(!canvas||typeof Chart==='undefined')return;const ctx=canvas.getContext('2d');if(radarChart)radarChart.destroy();radarChart=new Chart(ctx,{type:'radar',data:{labels:['卵巢储备','卵子/胚胎','精子因素','子宫环境','生活/情绪','激素代谢'],datasets:[{data:[score5(scores.reserve),score5(scores.eggEmbryo),score5(scores.sperm),score5(scores.uterus),score5(scores.lifestyle),score5(scores.hormone)],fill:true,backgroundColor:'rgba(34,197,94,0.12)',borderColor:'rgba(34,197,94,1)',pointBackgroundColor:'rgba(34,197,94,1)',pointBorderColor:'#fff',borderWidth:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:5,ticks:{stepSize:1,backdropColor:'transparent',color:'#6b7280'},pointLabels:{font:{size:12},color:'#6b7280'},grid:{color:'#d9dde3'},angleLines:{color:'#d9dde3'}}}}})}
+function getParsed(){const raw=document.getElementById('rawText').value.trim();if(!raw){alert('请先粘贴 Google Sheet 数据。');return null}const parsed=parseInput(raw);if(parsed.changed)document.getElementById('rawText').value=parsed.text;const validation=validateData(parsed.data);updatePanels(parsed,validation);return{parsed,validation}}
+document.getElementById('rawText').addEventListener('paste',e=>{e.preventDefault();const pasted=(e.clipboardData||window.clipboardData).getData('text');const normalized=autoNormalizePastedText(pasted);document.getElementById('rawText').value=normalized.text;document.getElementById('normalizedPreview').textContent=normalized.text||'等待粘贴数据…';document.getElementById('normalizeBadge').style.display=normalized.changed?'inline-block':'none'});
+document.getElementById('validateBtn').addEventListener('click',()=>{getParsed()});
+document.getElementById('generateBtn').addEventListener('click',()=>{const result=getParsed();if(!result)return;if(!result.validation.ok){alert('当前数据不完整，请先补齐缺失字段。');return}const d=result.parsed.data;const ageInfo=ageToBand(d.age);const data={...d,age:ageInfo.value,ageBand:ageInfo.band,ageLabel:ageInfo.label,amh:parseAMH(d.amh),afc:parseAFC(d.afc),fsh:parseFSH(d.fsh)};const reserve=reserveBand(data.amh,data.afc);const success={reserveBand:reserve.band,reserveLabel:reserve.label,successRate:successMatrix[reserve.band][data.ageBand]};const scores=calcScores(data);document.getElementById('report').innerHTML=createReport(data,success,scores,document.getElementById('sourceUrl').value.trim());setTimeout(()=>renderRadar(scores),60)});
+document.getElementById('sampleBtn').addEventListener('click',()=>{document.getElementById('rawText').value=SAMPLE_VALUES.join('\n');document.getElementById('normalizedPreview').textContent=SAMPLE_VALUES.join('\n');document.getElementById('sourceUrl').value='https://docs.google.com/spreadsheets/';document.getElementById('normalizeBadge').style.display='none'});
+document.getElementById('clearBtn').addEventListener('click',()=>{document.getElementById('sourceUrl').value='';document.getElementById('rawText').value='';document.getElementById('normalizedPreview').textContent='等待粘贴数据…';document.getElementById('normalizeBadge').style.display='none';document.getElementById('modeText').textContent='待识别';document.getElementById('lineCount').textContent='0';document.getElementById('requiredCount').textContent='0 / 0';document.getElementById('statusText').textContent='未检查';document.getElementById('validationSummary').className='status-pill status-warn';document.getElementById('validationSummary').textContent='尚未检查';document.getElementById('validationList').innerHTML='<li>点击“检查完整性”或“生成报告”后显示结果。</li>';document.getElementById('fieldGrid').innerHTML='';document.getElementById('report').innerHTML='<div class="title">试管综合评估报告</div><div class="meta-line">姓名：— ｜ 年龄区间：— ｜ 评估日期：—</div><div class="section-head"><h3>一、整体成功率预测</h3><span>该结果根据AMH、FSH、AFC和年龄综合计算得出，仅用于参考和对比</span></div><div class="success-box"><div class="pill">综合档位：— ｜ 预测成功率：—</div><p class="normal-copy">等待生成报告。</p></div><div class="section-head"><h3>二、当前生育力画像</h3><span>用于呈现当前状态和识别最需要改善的因素</span></div><div class="section-head"><h3>三、个性化改善建议</h3></div><div class="advice-box"><p class="normal-copy">等待生成报告。</p></div>' ;if(radarChart){radarChart.destroy();radarChart=null}});
+document.getElementById('pdfBtn').addEventListener('click',()=>{const report=document.getElementById('report');const opt={margin:10,filename:`LEOIVF-Report-${Date.now()}.pdf`,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}};html2pdf().set(opt).from(report).save()});
+</script>
 </body>
 </html>
