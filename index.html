@@ -25,7 +25,7 @@
     .card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:12px;margin-top:12px}
     .mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.mini-item{border:1px solid #e5e7eb;border-radius:12px;padding:8px 10px;background:#fafafa}.mini-item strong{display:block;font-size:12px;color:#6b7280;margin-bottom:2px}
     .status-pill{display:inline-block;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700}.status-ok{background:#dcfce7;color:#166534}.status-error{background:#fee2e2;color:#b91c1c}.status-warn{background:#fef3c7;color:#92400e}
-    .validation-list,.mapping-list{padding-left:18px;line-height:1.6;margin:10px 0 0}.field-grid{display:grid;grid-template-columns:1fr;gap:8px}.field-row{display:grid;grid-template-columns:98px 1fr;gap:8px;align-items:center;padding:8px 10px;background:#fafafa;border-radius:10px;border:1px solid #edf0f2}.field-row code{font-size:12px;color:#6b7280;word-break:break-word}
+    .validation-list,.mapping-list{padding-left:18px;line-height:1.6;margin:10px 0 0}.field-grid{display:grid;grid-template-columns:1fr;gap:12px}.field-row{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center;padding:8px 10px;background:#fafafa;border-radius:10px;border:1px solid #edf0f2}.field-row code{font-size:12px;color:#6b7280;word-break:break-word}
     .helper{font-size:12px;color:#6b7280;margin-top:6px}.norm-badge{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;background:#ecfeff;color:#0f766e;font-size:12px;font-weight:700}
     .preview-box{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:10px;min-height:920px}.preview-box pre{margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;white-space:pre-wrap;word-break:break-word;line-height:1.6;color:#374151}
     .report{position:relative;background:#fff;border-radius:16px;padding:24px 28px 22px;min-height:920px}.report:after{content:'';position:absolute;inset:0;border-radius:16px;outline:1.2px solid #b2dbd7;pointer-events:none}
@@ -47,20 +47,16 @@
   <section class="panel">
     <div class="panel-inner">
       <h1>数据输入区</h1>
-      <p class="muted">支持直接粘贴 Google Sheet 内容。粘贴后会自动整理成一行一个字段，便于检测和生成报告。</p>
-      <label for="sourceUrl">结果链接（可选，仅记录）</label>
-      <input id="sourceUrl" type="text" placeholder="粘贴 Google Sheet / 表单来源链接" />
-      <label for="rawText">Sheet 竖排数据</label>
+      <p class="muted">支持直接粘贴 Google Sheet 内容。粘贴后会自动整理成一行一个字段，便于检测和生成。</p>
+            <label for="rawText">用户问卷数据</label>
       <textarea id="rawText" placeholder="直接粘贴 Google Sheet 数据"></textarea>
       <div class="helper">无需手动换行，工具会自动整理。</div>
       <div id="normalizeBadge" class="norm-badge" style="display:none;">已自动整理粘贴内容</div>
       <div class="btn-row">
-        <button class="primary" id="generateBtn">生成报告</button>
-        <button class="secondary" id="validateBtn">检查完整性</button>
-        <button class="secondary" id="pdfBtn">下载 PDF</button>
-        <button class="secondary" id="sampleBtn">填入示例</button>
-        <button class="danger" id="clearBtn">清空</button>
-      </div>
+        <button class="primary" id="generateBtn">生成</button>
+        <button class="secondary" id="validateBtn">检查</button>
+        <button class="secondary" id="pdfBtn">下载</button>
+              </div>
       <div class="card">
         <h2>导入状态</h2>
         <div class="mini-grid">
@@ -73,17 +69,14 @@
       <div class="card">
         <h2>完整性验证</h2>
         <div id="validationSummary" class="status-pill status-warn">尚未检查</div>
-        <ul id="validationList" class="validation-list"><li>点击“检查完整性”或“生成报告”后显示结果。</li></ul>
+        <ul id="validationList" class="validation-list"><li>点击“检查”或“生成”后显示结果。</li></ul>
       </div>
     </div>
   </section>
 
-  <section class="preview">
+  <section class="preview" style="min-width:320px;">
     <div class="preview-inner">
-      <h1>预览区</h1>
-      <p class="muted">中栏用于确认自动整理后的数据和字段映射，方便快速发现错位。</p>
-      <div class="preview-box"><pre id="normalizedPreview">等待粘贴数据…</pre></div>
-      <div class="card">
+      <div class="card" style="margin-top:0;">
         <h2>字段映射</h2>
         <div id="fieldGrid" class="field-grid"></div>
       </div>
@@ -95,10 +88,10 @@
       <div class="title">试管综合评估报告</div>
       <div class="meta-line">姓名：— ｜ 年龄区间：— ｜ 评估日期：—</div>
       <div class="section-head"><h3>一、整体成功率预测</h3><span>该结果根据AMH、FSH、AFC和年龄综合计算得出，仅用于参考和对比</span></div>
-      <div class="success-box"><div class="pill">综合档位：— ｜ 预测成功率：—</div><p class="normal-copy">等待生成报告。</p></div>
+      <div class="success-box"><div class="pill">综合档位：— ｜ 预测成功率：—</div><p class="normal-copy">等待生成。</p></div>
       <div class="section-head"><h3>二、当前生育力画像</h3><span>用于呈现当前状态和识别最需要改善的因素</span></div>
       <div class="section-head"><h3>三、个性化改善建议</h3></div>
-      <div class="advice-box"><p class="normal-copy">等待生成报告。</p></div>
+      <div class="advice-box"><p class="normal-copy">等待生成。</p></div>
     </div>
   </section>
 </div>
@@ -112,9 +105,9 @@ function normalizeText(t){return (t||'').replace(/\r/g,'').replace(/[—-]/g,'�
 function escapeHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;')}
 function autoNormalizePastedText(raw){const text=normalizeText(raw).replace(/\t/g,' ').replace(/\s+/g,' ').trim();if(!text)return{text:'',values:[],changed:false,mode:'空文本'};const originalLines=normalizeText(raw).split('\n').map(v=>v.trim()).filter(Boolean);if(originalLines.length>=20)return{text:originalLines.join('\n'),values:originalLines,changed:false,mode:'已是逐行数据'};let cursor=0;const values=[];while(cursor<text.length){while(text[cursor]===' ')cursor++;if(cursor>=text.length)break;let matched=null;for(const pattern of TOKEN_PATTERNS){pattern.lastIndex=cursor;const m=pattern.exec(text);if(m&&m.index===cursor){matched=m[0].replace(/\s+/g,' ').trim();break}}if(matched){values.push(matched);cursor+=matched.length}else{let next=text.indexOf(' ',cursor);if(next===-1)next=text.length;values.push(text.slice(cursor,next).trim());cursor=next+1}}const changed=values.length>originalLines.length;return{text:values.join('\n'),values,changed,mode:changed?'自动拆分粘贴内容':'逐行映射'}}
 function parseInput(raw){const normalized=autoNormalizePastedText(raw);const data={};FIELD_ORDER.forEach((field,index)=>data[field.key]=normalized.values[index]||'');return{...normalized,data,lineCount:normalized.values.length}}
-function validateData(data){const required=FIELD_ORDER.filter(f=>f.required);const missing=required.filter(f=>!String(data[f.key]||'').trim());const messages=[];if(!missing.length)messages.push('关键字段完整，可以生成报告。');else messages.push(`当前仍缺少 ${missing.length} 个关键字段。`);['name','age','amh','afc','fsh','endometrium'].forEach(key=>{if(!data[key])messages.push(`缺少${FIELD_ORDER.find(f=>f.key===key).label}。`)}) ;return{ok:missing.length===0,present:required.length-missing.length,total:required.length,missing,messages}}
+function validateData(data){const required=FIELD_ORDER.filter(f=>f.required);const missing=required.filter(f=>!String(data[f.key]||'').trim());const messages=[];if(!missing.length)messages.push('关键字段完整，可以生成。');else messages.push(`当前仍缺少 ${missing.length} 个关键字段。`);['name','age','amh','afc','fsh','endometrium'].forEach(key=>{if(!data[key])messages.push(`缺少${FIELD_ORDER.find(f=>f.key===key).label}。`)}) ;return{ok:missing.length===0,present:required.length-missing.length,total:required.length,missing,messages}}
 function renderMapping(data){document.getElementById('fieldGrid').innerHTML=FIELD_ORDER.map(field=>`<div class="field-row"><strong>${field.label}</strong><code>${data[field.key]?escapeHtml(data[field.key]):'<span style="color:#9ca3af">未提供</span>'}</code></div>`).join('')}
-function updatePanels(parsed,validation){document.getElementById('modeText').textContent=parsed.mode;document.getElementById('lineCount').textContent=`${parsed.lineCount} 行`;document.getElementById('requiredCount').textContent=`${validation.present} / ${validation.total}`;document.getElementById('statusText').textContent=validation.ok?'可生成':'字段不完整';document.getElementById('normalizedPreview').textContent=parsed.text||'等待粘贴数据…';const badge=document.getElementById('normalizeBadge');badge.style.display=parsed.changed?'inline-block':'none';const summary=document.getElementById('validationSummary');summary.className=`status-pill ${validation.ok?'status-ok':'status-error'}`;summary.textContent=validation.ok?'字段完整，可生成报告':`缺少 ${validation.missing.length} 项字段`;document.getElementById('validationList').innerHTML=validation.messages.map(x=>`<li>${escapeHtml(x)}</li>`).join('')+(validation.missing.length?validation.missing.map(x=>`<li>未填写：${escapeHtml(x.label)}</li>`).join(''):'');renderMapping(parsed.data)}
+function updatePanels(parsed,validation){document.getElementById('modeText').textContent=parsed.mode;document.getElementById('lineCount').textContent=`${parsed.lineCount} 行`;document.getElementById('requiredCount').textContent=`${validation.present} / ${validation.total}`;document.getElementById('statusText').textContent=validation.ok?'可生成':'字段不完整';document.getElementById('normalizedPreview').textContent=parsed.text||'等待粘贴数据…';const badge=document.getElementById('normalizeBadge');badge.style.display=parsed.changed?'inline-block':'none';const summary=document.getElementById('validationSummary');summary.className=`status-pill ${validation.ok?'status-ok':'status-error'}`;summary.textContent=validation.ok?'字段完整，可生成':`缺少 ${validation.missing.length} 项字段`;document.getElementById('validationList').innerHTML=validation.messages.map(x=>`<li>${escapeHtml(x)}</li>`).join('')+(validation.missing.length?validation.missing.map(x=>`<li>未填写：${escapeHtml(x.label)}</li>`).join(''):'');renderMapping(parsed.data)}
 function ageToBand(ageText){const t=ageText||'';if(/≤33|33岁/.test(t))return{value:33,band:'A1',label:'≤33岁'};if(/34/.test(t)&&!/40|41|42/.test(t))return{value:34,band:'A2',label:'34岁'};if(/35|36|37/.test(t)&&!/40|41|42/.test(t))return{value:36,band:'A3',label:'35–37岁'};if(/38|39|40/.test(t)&&!/41|42/.test(t))return{value:39,band:'A4',label:'38–40岁'};if(/41|42|43|44/.test(t))return{value:42,band:'A5',label:'41岁以上'};return{value:39,band:'A4',label:'38–40岁'}}
 function parseAMH(v){const t=v||'';if(/2\.0|>2|≥2/.test(t))return 2.1;if(/1\.5/.test(t))return 1.7;if(/1\.0/.test(t))return 1.2;if(/0\.7|0\.5/.test(t))return 0.8;if(/<0\.7|0\.1|0\.2|0\.3|0\.4|0\.6/.test(t))return 0.6;return 1.0}
 function parseAFC(v){const t=v||'';if(/15|16|17|18|19|20/.test(t))return 16;if(/10–14|10-14/.test(t))return 12;if(/5–9|5-9/.test(t))return 7;if(/3–4|3-4/.test(t))return 3;return 2}
@@ -131,11 +124,11 @@ function personalizedAdvice(scores,data){const weak=topAdvice(scores);const firs
 function createReport(data,success,scores,sourceUrl){const advice=personalizedAdvice(scores,data);return `<div class="title">试管综合评估报告</div><div class="meta-line">姓名：${escapeHtml(data.name)} ｜ 年龄区间：${escapeHtml(data.ageLabel)} ｜ 评估日期：${getToday()}</div><div class="section-head"><h3>一、整体成功率预测</h3><span>该结果根据AMH、FSH、AFC和年龄综合计算得出，仅用于参考和对比</span></div><div class="success-box"><div class="pill">综合档位：${successGrade(success.successRate)} ｜ 预测成功率：${success.successRate}%</div><div class="success-layout"><div><p class="lead-copy">当前下一次 IVF 整体成功率预测约为 ${success.successRate}%，目前处于“${successGrade(success.successRate)}”等级。</p><p class="normal-copy">通过针对性指导、改善和调整后，成功率仍有上升空间。</p></div><div><div class="progress"><div class="seg-1"></div><div class="seg-2"></div><div class="seg-3"></div><div class="seg-4"></div><div class="seg-5"></div></div><div class="marker-track"><div class="marker" style="left:${markerLeft(success.successRate)}%"></div></div><div class="progress-words"><span>极低</span><span>偏低</span><span>中等</span><span>偏高</span><span>较高</span></div></div></div></div><div class="section-head"><h3>二、当前生育力画像</h3><span>用于呈现当前状态和识别最需要改善的因素</span></div><div class="radar-wrap-section"><div class="radar-wrap"><canvas id="radarCanvas"></canvas></div><div><ul class="score-list"><li>卵巢储备：${score5(scores.reserve)} 分。</li><li>卵子/胚胎：${score5(scores.eggEmbryo)} 分。</li><li>精子因素：${score5(scores.sperm)} 分。</li><li>子宫环境：${score5(scores.uterus)} 分。</li><li>生活/情绪：${score5(scores.lifestyle)} 分。</li><li>激素代谢：${score5(scores.hormone)} 分。</li></ul><div class="score-desc">每个维度最高5分，最低1分，得分越低越需要改善。</div></div></div><div class="section-head"><h3>三、个性化改善建议</h3></div><div class="advice-box"><p class="advice-title">${advice.intro}</p><ul>${advice.bullets.map(x=>`<li>${x}</li>`).join('')}</ul></div><div class="footer-note"><span>说明：本报告旨在帮助定位问题，不代表任何诊疗意见。</span><span>© 2026 LEOIVF.COM. All rights reserved.</span></div>`}
 function renderRadar(scores){const canvas=document.getElementById('radarCanvas');if(!canvas||typeof Chart==='undefined')return;const ctx=canvas.getContext('2d');if(radarChart)radarChart.destroy();radarChart=new Chart(ctx,{type:'radar',data:{labels:['卵巢储备','卵子/胚胎','精子因素','子宫环境','生活/情绪','激素代谢'],datasets:[{data:[score5(scores.reserve),score5(scores.eggEmbryo),score5(scores.sperm),score5(scores.uterus),score5(scores.lifestyle),score5(scores.hormone)],fill:true,backgroundColor:'rgba(34,197,94,0.12)',borderColor:'rgba(34,197,94,1)',pointBackgroundColor:'rgba(34,197,94,1)',pointBorderColor:'#fff',borderWidth:3}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{r:{min:0,max:5,ticks:{stepSize:1,backdropColor:'transparent',color:'#6b7280'},pointLabels:{font:{size:12},color:'#6b7280'},grid:{color:'#d9dde3'},angleLines:{color:'#d9dde3'}}}}})}
 function getParsed(){const raw=document.getElementById('rawText').value.trim();if(!raw){alert('请先粘贴 Google Sheet 数据。');return null}const parsed=parseInput(raw);if(parsed.changed)document.getElementById('rawText').value=parsed.text;const validation=validateData(parsed.data);updatePanels(parsed,validation);return{parsed,validation}}
-document.getElementById('rawText').addEventListener('paste',e=>{e.preventDefault();const pasted=(e.clipboardData||window.clipboardData).getData('text');const normalized=autoNormalizePastedText(pasted);document.getElementById('rawText').value=normalized.text;document.getElementById('normalizedPreview').textContent=normalized.text||'等待粘贴数据…';document.getElementById('normalizeBadge').style.display=normalized.changed?'inline-block':'none'});
+document.getElementById('rawText').addEventListener('paste',e=>{e.preventDefault();const pasted=(e.clipboardData||window.clipboardData).getData('text');const normalized=autoNormalizePastedText(pasted);document.getElementById('rawText').value=normalized.text;document.getElementById('normalizeBadge').style.display=normalized.changed?'inline-block':'none'});
 document.getElementById('validateBtn').addEventListener('click',()=>{getParsed()});
-document.getElementById('generateBtn').addEventListener('click',()=>{const result=getParsed();if(!result)return;if(!result.validation.ok){alert('当前数据不完整，请先补齐缺失字段。');return}const d=result.parsed.data;const ageInfo=ageToBand(d.age);const data={...d,age:ageInfo.value,ageBand:ageInfo.band,ageLabel:ageInfo.label,amh:parseAMH(d.amh),afc:parseAFC(d.afc),fsh:parseFSH(d.fsh)};const reserve=reserveBand(data.amh,data.afc);const success={reserveBand:reserve.band,reserveLabel:reserve.label,successRate:successMatrix[reserve.band][data.ageBand]};const scores=calcScores(data);document.getElementById('report').innerHTML=createReport(data,success,scores,document.getElementById('sourceUrl').value.trim());setTimeout(()=>renderRadar(scores),60)});
-document.getElementById('sampleBtn').addEventListener('click',()=>{document.getElementById('rawText').value=SAMPLE_VALUES.join('\n');document.getElementById('normalizedPreview').textContent=SAMPLE_VALUES.join('\n');document.getElementById('sourceUrl').value='https://docs.google.com/spreadsheets/';document.getElementById('normalizeBadge').style.display='none'});
-document.getElementById('clearBtn').addEventListener('click',()=>{document.getElementById('sourceUrl').value='';document.getElementById('rawText').value='';document.getElementById('normalizedPreview').textContent='等待粘贴数据…';document.getElementById('normalizeBadge').style.display='none';document.getElementById('modeText').textContent='待识别';document.getElementById('lineCount').textContent='0';document.getElementById('requiredCount').textContent='0 / 0';document.getElementById('statusText').textContent='未检查';document.getElementById('validationSummary').className='status-pill status-warn';document.getElementById('validationSummary').textContent='尚未检查';document.getElementById('validationList').innerHTML='<li>点击“检查完整性”或“生成报告”后显示结果。</li>';document.getElementById('fieldGrid').innerHTML='';document.getElementById('report').innerHTML='<div class="title">试管综合评估报告</div><div class="meta-line">姓名：— ｜ 年龄区间：— ｜ 评估日期：—</div><div class="section-head"><h3>一、整体成功率预测</h3><span>该结果根据AMH、FSH、AFC和年龄综合计算得出，仅用于参考和对比</span></div><div class="success-box"><div class="pill">综合档位：— ｜ 预测成功率：—</div><p class="normal-copy">等待生成报告。</p></div><div class="section-head"><h3>二、当前生育力画像</h3><span>用于呈现当前状态和识别最需要改善的因素</span></div><div class="section-head"><h3>三、个性化改善建议</h3></div><div class="advice-box"><p class="normal-copy">等待生成报告。</p></div>' ;if(radarChart){radarChart.destroy();radarChart=null}});
+document.getElementById('generateBtn').addEventListener('click',()=>{const result=getParsed();if(!result)return;if(!result.validation.ok){alert('当前数据不完整，请先补齐缺失字段。');return}const d=result.parsed.data;const ageInfo=ageToBand(d.age);const data={...d,age:ageInfo.value,ageBand:ageInfo.band,ageLabel:ageInfo.label,amh:parseAMH(d.amh),afc:parseAFC(d.afc),fsh:parseFSH(d.fsh)};const reserve=reserveBand(data.amh,data.afc);const success={reserveBand:reserve.band,reserveLabel:reserve.label,successRate:successMatrix[reserve.band][data.ageBand]};const scores=calcScores(data);document.getElementById('report').innerHTML=createReport(data,success,scores,'');setTimeout(()=>renderRadar(scores),60)});
+
+document.getElementById('clearBtn').addEventListener('click',()=>{document.getElementById('rawText').value='';document.getElementById('normalizeBadge').style.display='none';document.getElementById('modeText').textContent='待识别';document.getElementById('lineCount').textContent='0';document.getElementById('requiredCount').textContent='0 / 0';document.getElementById('statusText').textContent='未检查';document.getElementById('validationSummary').className='status-pill status-warn';document.getElementById('validationSummary').textContent='尚未检查';document.getElementById('validationList').innerHTML='<li>点击“检查”或“生成”后显示结果。</li>';document.getElementById('fieldGrid').innerHTML='';document.getElementById('report').innerHTML='<div class="title">试管综合评估报告</div><div class="meta-line">姓名：— ｜ 年龄区间：— ｜ 评估日期：—</div><div class="section-head"><h3>一、整体成功率预测</h3><span>该结果根据AMH、FSH、AFC和年龄综合计算得出，仅用于参考和对比</span></div><div class="success-box"><div class="pill">综合档位：— ｜ 预测成功率：—</div><p class="normal-copy">等待生成。</p></div><div class="section-head"><h3>二、当前生育力画像</h3><span>用于呈现当前状态和识别最需要改善的因素</span></div><div class="section-head"><h3>三、个性化改善建议</h3></div><div class="advice-box"><p class="normal-copy">等待生成。</p></div>' ;if(radarChart){radarChart.destroy();radarChart=null}});
 document.getElementById('pdfBtn').addEventListener('click',()=>{const report=document.getElementById('report');const opt={margin:10,filename:`LEOIVF-Report-${Date.now()}.pdf`,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}};html2pdf().set(opt).from(report).save()});
 </script>
 </body>
