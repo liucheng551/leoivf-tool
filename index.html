@@ -11,8 +11,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     *{box-sizing:border-box} body{margin:0;font-family:'Noto Sans SC',sans-serif;background:#f3f6f8;color:#1f2937}
-    .page{max-width:1520px;margin:0 auto;padding:18px;display:grid;grid-template-columns:340px 440px 1fr;gap:16px;align-items:start}
-    .panel,.mapping,.report-panel{background:#f4fbfa;border-radius:16px;padding:12px}
+    .page{max-width:1520px;margin:0 auto;padding:18px;display:grid;grid-template-columns:360px 320px 1fr;gap:16px;align-items:stretch}
+    .panel,.mapping,.report-panel{background:#f4fbfa;border-radius:16px;padding:12px;height:100%;box-sizing:border-box}
     .panel-inner,.mapping-inner{background:rgba(255,255,255,.35);border-radius:14px;padding:10px}
     h1{font-size:22px;margin:0 0 8px;text-align:center;font-weight:800} h2{font-size:16px;margin:0 0 10px;font-weight:800}
     .muted{color:#6b7280;font-size:12px;line-height:1.55} label{display:block;font-size:14px;font-weight:700;margin:14px 0 6px}
@@ -24,7 +24,7 @@
     .mini-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.mini-item{border:1px solid #e5e7eb;border-radius:12px;padding:8px 10px;background:#fafafa}.mini-item strong{display:block;font-size:12px;color:#6b7280;margin-bottom:2px}
     .status-pill{display:inline-block;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:700}.status-ok{background:#dcfce7;color:#166534}.status-error{background:#fee2e2;color:#b91c1c}.status-warn{background:#fef3c7;color:#92400e}
     .validation-list{padding-left:18px;line-height:1.6;margin:10px 0 0}.field-grid{display:grid;grid-template-columns:1fr;gap:8px}.field-row{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:center;padding:8px 10px;background:#fafafa;border-radius:10px;border:1px solid #edf0f2}.field-row code{font-size:12px;color:#4b5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .helper{font-size:12px;color:#6b7280;margin-top:6px}.norm-badge{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;background:#ecfeff;color:#0f766e;font-size:12px;font-weight:700}
+    .helper{font-size:12px;color:#6b7280;margin-top:6px}.email-box{margin-top:8px}.email-row{display:flex;gap:8px;align-items:center}.email-row input{flex:1}.email-row button{white-space:nowrap;padding-inline:14px}.norm-badge{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;background:#ecfeff;color:#0f766e;font-size:12px;font-weight:700}.report-panel-header h1{font-size:16px;font-weight:800;margin:0 0 6px}.report-panel-header .muted{margin-bottom:8px}
     .report{position:relative;background:#fff;border-radius:16px;padding:24px 28px 22px;min-height:920px}.report:after{content:'';position:absolute;inset:0;border-radius:16px;outline:1.2px solid #b2dbd7;pointer-events:none}
     .title{font-size:24px;font-weight:800;text-align:center;margin:0 0 8px}.meta-line{text-align:center;color:#6b7280;font-size:14px;margin-bottom:18px}
     .section-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:18px 0 10px}.section-head h3{margin:0;font-size:18px;font-weight:800}.section-head span{color:#6b7280;font-size:13px}
@@ -48,11 +48,11 @@
       <div class="helper">无需手动换行，工具会自动整理。</div>
       <div id="normalizeBadge" class="norm-badge" style="display:none;">已自动整理粘贴内容</div>
       <div class="btn-row">
-        <button class="primary" id="generateBtn">生成报告</button>
-        <button class="secondary" id="validateBtn">检查完整性</button>
-        <button class="secondary" id="pdfBtn">下载 PDF</button>
-        <button class="danger" id="clearBtn">清空</button>
-      </div>
+  <button class="primary" id="validateBtn">检查</button>
+  <button class="primary" id="generateBtn">生成</button>
+  <button class="primary" id="pdfBtn">下载</button>
+  <button class="danger" id="clearBtn">清空</button>
+</div>
       <div class="card">
         <h2>导入状态</h2>
         <div class="mini-grid">
@@ -72,10 +72,10 @@
 
   <section class="mapping">
     <div class="mapping-inner">
-      <h1>字段映射区</h1>
+      <h1>数据预览区</h1>
       <p class="muted">用于确认自动整理后的字段是否正确对应，已加宽显示区域，尽量让每个结果单行展示。</p>
-      <div class="card" style="margin-top:0; min-height:920px;">
-        <h2>字段映射</h2>
+      <div class="card" style="margin-top:0; min-height:920px; max-height:920px; overflow:auto;">
+        
         <div id="fieldGrid" class="field-grid"></div>
       </div>
     </div>
